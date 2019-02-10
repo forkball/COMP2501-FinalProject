@@ -11,7 +11,7 @@ public:
 
 protected:
 	//speed of the players' rotate
-	float rotationSpeed = 0.5f;
+	float rotationSpeed = 0.1f;
 	//speed increment - how fast speed increases/decreases
 	float speedIncrement = 0.01f;
 };

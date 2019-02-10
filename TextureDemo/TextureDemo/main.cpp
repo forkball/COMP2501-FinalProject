@@ -12,9 +12,11 @@
 #include <SOIL/SOIL.h> // read image file
 #include <chrono>
 #include <thread>
+#include "glm/ext.hpp"
 
 #include "Shader.h"
 #include "Window.h"
+#include "Camera.h"
 #include "PlayerGameObject.h"
 
 // Macro for printing exceptions
@@ -25,7 +27,7 @@
 const std::string window_title_g = "Assignment 2 - Asteroids";
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
-const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.0);
+const glm::vec3 viewport_background_color_g(0.0, 0.5, 0.0);
 
 // Global texture info
 GLuint tex[4];
@@ -135,7 +137,7 @@ int main(void){
 		// Run the main loop
 		double lastTime = glfwGetTime();
 
-		float cameraZoom = 0.5f;
+		Camera* camera = new Camera(shader,window,glm::vec2(window_width_g,window_height_g));
 		while (!glfwWindowShouldClose(window.getWindow())) {
 			// Clear background
 			window.clear(viewport_background_color_g);	
@@ -149,14 +151,7 @@ int main(void){
 			shader.enable();
 
 			// Setup camera to focus on the player object (the first object in the gameObjects array)
-			glm::vec3 cameraTranslatePos(-player->getPosition());
-			cameraZoom = glm::clamp(cameraZoom, 0.1f, 1.0f);
-			glm::mat4 viewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(cameraZoom, cameraZoom, cameraZoom)) * glm::translate(glm::mat4(1.0f), cameraTranslatePos);
-			shader.setUniformMat4("viewMatrix", viewMatrix);
-
-			//zooms camera in and out
-			if (glfwGetKey(Window::getWindow(), GLFW_KEY_Z) == GLFW_PRESS) cameraZoom -= 0.002;
-			else if (glfwGetKey(Window::getWindow(), GLFW_KEY_X) == GLFW_PRESS) cameraZoom += 0.002;
+			camera->update(deltaTime);
 			
 			player->update(deltaTime);
 			player->render(shader);
