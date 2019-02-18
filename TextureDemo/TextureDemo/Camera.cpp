@@ -26,7 +26,7 @@ void Camera::update(double deltaTime)
 {
 	//positional updates
 	glm::vec2 mousePosition(getMousePosition());
-	if (glm::abs(glm::length(mousePosition)) > 0.5)
+	if (glm::abs(glm::length(mousePosition)) > panningThreshold)
 	{
 		position.x += (mousePosition.x * panningSpeed) * deltaTime;
 		position.y += (mousePosition.y * panningSpeed) * deltaTime;

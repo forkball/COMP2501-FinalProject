@@ -30,6 +30,7 @@ private:
 
 	//panning speed of camera
 	float panningSpeed = 2;
+	float panningThreshold = 0.7;
 	
 	//controls how zoomed in the camera is
 	float zoom;

@@ -17,14 +17,14 @@
 #include "Shader.h"
 #include "Window.h"
 #include "Camera.h"
-#include "PlayerGameObject.h"
+#include "Board.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
 	std::cerr << exception_object.what() << std::endl
 
 // Globals that define the OpenGL window and viewport
-const std::string window_title_g = "Assignment 2 - Asteroids";
+const std::string window_title_g = "Final Assignment - Tower Defense";
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.5, 0.0);
@@ -131,9 +131,6 @@ int main(void){
 		// Set up the textures
 		setallTexture();
 
-		// Setup the player object (position, texture, vertex count)
-		PlayerGameObject* player = new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex[0],size);
-
 		// Run the main loop
 		double lastTime = glfwGetTime();
 
@@ -152,9 +149,6 @@ int main(void){
 
 			// Setup camera to focus on the player object (the first object in the gameObjects array)
 			camera->update(deltaTime);
-			
-			player->update(deltaTime);
-			player->render(shader);
 			// Update other events like input handling
 			glfwPollEvents();
 

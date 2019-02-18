@@ -22,22 +22,17 @@ public:
 
 	// Getters
 	inline glm::vec3& getPosition() { return position; }
-	inline glm::vec3& getVelocity() { return velocity; }	
 	inline float getOrientation() { return orientation; }
 
 	// Setters
 	inline void setPosition(glm::vec3& newPosition) { position = newPosition; }
-	inline void setVelocity(glm::vec3& newVelocity) { velocity = newVelocity; }
 protected:
 	// Object's Transform Variables
-	// TODO: Add more transformation variables
 	glm::vec3 position;
-	glm::vec3 velocity;
 	glm::vec3 scale;
 	//holds direction
 	glm::vec2 direction = glm::vec2(0.0f);
 	float orientation;
-	float speed;
 
 	// Object's details
 	GLint numElements;

@@ -5,22 +5,16 @@
 	The update method is virtual, so you can inherit from GameObject and override the update functionality (see PlayerGameObject for reference)
 */
 
-GameObject::GameObject(glm::vec3 &entityPosition, GLuint entityTexture, GLint entityNumElements) {
-	orientation = 0.0f; speed = 0.0f;
+GameObject::GameObject(glm::vec3 &entityPosition, GLuint entityTexture, GLint entityNumElements)
+{
+	orientation = 0.0f;
 	position = entityPosition;
 	texture = entityTexture;
 	numElements = entityNumElements;
-	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 // Updates the GameObject's state. Can be overriden for children
 void GameObject::update(double deltaTime) {
-	// Update object position
-	direction.x = (float)glm::cos(orientation * (glm::pi<float>() / 180));
-	direction.y = (float)glm::sin(orientation * (glm::pi<float>() / 180));
-	direction = glm::normalize(direction);
-	position.x += (direction.x * speed) * deltaTime;
-	position.y += (direction.y * speed) * deltaTime;
 }
 
 // Renders the GameObject using a shader

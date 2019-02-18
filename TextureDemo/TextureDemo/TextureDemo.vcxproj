@@ -151,20 +151,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="PlayerGameObject.cpp" />
+    <ClCompile Include="Castle.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Tower.cpp" />
+    <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="PlayerGameObject.h" />
+    <ClInclude Include="Castle.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Tower.h" />
+    <ClInclude Include="Unit.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
