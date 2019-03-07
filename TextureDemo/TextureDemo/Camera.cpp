@@ -3,8 +3,6 @@
 Camera::Camera(Shader &shader, Window &window, glm::vec2 windowSize) 
 	: shader(shader), window(window), windowSize(windowSize)
 {
-	zoom = 0.5f;
-	zoomSpeed = 0.001f;
 	position = glm::vec3(0.0f);
 }
 
@@ -26,14 +24,17 @@ void Camera::update(double deltaTime)
 {
 	//positional updates
 	glm::vec2 mousePosition(getMousePosition());
-	if (glm::abs(glm::length(mousePosition)) > panningThreshold)
+	if ((glm::abs(glm::length(mousePosition)) > panningThreshold) && ((position.x >= -6) && (position.x <= 6)))
 	{
 		position.x += (mousePosition.x * panningSpeed) * deltaTime;
-		position.y += (mousePosition.y * panningSpeed) * deltaTime;
+	}
+	else {
+		if (position.x <= -6) position.x += panningSpeed * deltaTime;
+		if (position.x >= 6) position.x -= panningSpeed * deltaTime;
 	}
 	glm::vec3 cameraTranslatePos(glm::vec3(position.x, position.y, 0.0f));
 	//scaling updates
-	zoom = glm::clamp(zoom, 0.1f, 1.0f);
+	zoom = glm::clamp(zoom, 0.2f, 0.6f);
 	//apply transformations
 	glm::mat4 viewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(zoom)) * glm::translate(glm::mat4(1.0f), cameraTranslatePos);
 	shader.setUniformMat4("viewMatrix", viewMatrix);

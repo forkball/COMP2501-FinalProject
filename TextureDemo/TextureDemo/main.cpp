@@ -96,8 +96,8 @@ void setallTexture(void)
 {
 //	tex = new GLuint[4];
 	glGenTextures(4, tex);
-	setthisTexture(tex[0], "ship.png");
-	setthisTexture(tex[1], "proj.png");
+	setthisTexture(tex[0], "castle1.png");
+	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "rock.png");
 	setthisTexture(tex[3], "orb.png");
 
@@ -130,11 +130,20 @@ int main(void){
 
 		// Set up the textures
 		setallTexture();
+		vector<GLuint> castleOneUnitTextures = { tex[0] };
+		vector<GLuint> castleTwoUnitTextures = { tex[0] };
+
+		vector<GLuint> castleOneTowerTextures = { tex[0] };
+		vector<GLuint> castleTwoTowerTextures = { tex[0] };
+
+		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0,0),glm::vec3(1,1,1),tex[0],size,castleOneUnitTextures,castleOneTowerTextures), 
+									new Castle(1,glm::vec3(6,0,0),glm::vec3(-1,1,1),tex[1],size,castleTwoUnitTextures,castleTwoTowerTextures)};
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
-
 		Camera* camera = new Camera(shader,window,glm::vec2(window_width_g,window_height_g));
+		Board* board = new Board(castles);
+
 		while (!glfwWindowShouldClose(window.getWindow())) {
 			// Clear background
 			window.clear(viewport_background_color_g);	
@@ -149,6 +158,12 @@ int main(void){
 
 			// Setup camera to focus on the player object (the first object in the gameObjects array)
 			camera->update(deltaTime);
+
+			//game entity rendering
+			board->render(shader);
+			//game entity updating
+			board->update(deltaTime);
+
 			// Update other events like input handling
 			glfwPollEvents();
 
