@@ -157,6 +157,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FileUtils.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="Unit.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Castle.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="Unit.h" />

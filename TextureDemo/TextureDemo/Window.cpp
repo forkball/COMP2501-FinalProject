@@ -2,7 +2,7 @@
 
 GLFWwindow* Window::window;
 
-Window::Window(const unsigned int windowWidth, const unsigned int windowHeight, const std::string &windowTitle) {
+Window::Window(const unsigned int windowWidth, const unsigned int windowHeight, const std::string &windowTitle) : width(windowWidth),height(windowHeight){
 	// Initialize the window management library (GLFW)
 	if (!glfwInit()) {
 		throw(std::runtime_error(std::string("Could not initialize the GLFW library")));
@@ -36,6 +36,7 @@ Window::~Window() {
 	glfwDestroyWindow(window);
 	glfwTerminate();
 }
+
 
 // Clears the window by setting it to a colour
 void Window::clear(const glm::vec3 &colour) {

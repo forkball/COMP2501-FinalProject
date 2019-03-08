@@ -16,7 +16,7 @@ public:
 	static inline GLFWwindow* getWindow() { return window; }
 private:
 	static GLFWwindow *window;
-
 	static friend void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static friend void ResizeCallback(GLFWwindow* window, int width, int height);
+	int height, width;
 };

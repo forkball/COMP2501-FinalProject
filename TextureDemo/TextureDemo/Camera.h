@@ -16,10 +16,14 @@ public:
 	Camera(Shader &shader, Window &window, glm::vec2 windowSize);
 	~Camera();
 	void update(double deltaTime);
+	//gets the position of the camera
+	inline glm::vec3 getPosition() { return position; }
+	//zoom of camera
+	inline float getZoom() { return zoom; }
 	//zooms the camera in and out
 	inline void zoomCamera(float zoomAmount) { zoom += zoomAmount; }
 	//returns the mouse position in relation to the window
-	glm::vec2 getMousePosition();
+	static glm::vec2 getMousePosition();
 private:
 	//holds the view
 	glm::mat4 viewMatrix;

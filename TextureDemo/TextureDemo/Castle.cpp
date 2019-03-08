@@ -1,10 +1,16 @@
 #include "Castle.h"
 
 //constructor
-Castle::Castle(bool playerControlled ,glm::vec3 &entityPosition, glm::vec3 spriteScale, GLuint entityTexture, GLint entityNumElements, vector<GLuint> unitTextures, vector<GLuint> towerTextures) :
-	GameObject(entityPosition, entityTexture, entityNumElements), playerControlled(playerControlled), unitTextures(unitTextures), numElem(entityNumElements), towerTextures(towerTextures)
+Castle::Castle(bool playerControlled ,glm::vec3 &entityPosition, glm::vec3 spriteScale, GLuint entityTexture, GLint entityNumElements, vector<GLuint> projectileTextures, vector<GLuint> unitTextures, vector<GLuint> towerTextures) :
+	GameObject(entityPosition, entityTexture, entityNumElements), playerControlled(playerControlled), projectileTextures(projectileTextures), unitTextures(unitTextures), numElem(entityNumElements), towerTextures(towerTextures)
 {
 	scale = spriteScale;
+	if (playerControlled) {
+		createTower(0, playerControlled, position + glm::vec3(-1.5, 0.5, 0));
+		createUnit(0, playerControlled, position + glm::vec3(-1.5, -0.1, 0));
+	} else {
+		createUnit(0, 0, position + glm::vec3(10, -0.1, 0));
+	}
 }
 
 //destructor
@@ -21,30 +27,19 @@ Castle::~Castle()
 }
 
 //creates a new unit
-void Castle::createUnit(int type, glm::vec3 position)
+void Castle::createUnit(int type, bool playerControlled, glm::vec3 position)
 {
-	units.push_back(new Unit(type, glm::vec3((playerControlled) ? -1 : 1, 1, 1), position, unitTextures[type], numElem));
+	units.push_back(new Unit(type, playerControlled, glm::vec3((playerControlled) ? -0.15 : 0.15, 0.2, 1), position, unitTextures[type], numElem));
 }
 
 //creates a new tower
-void Castle::createTower(int type, glm::vec3 position)
+void Castle::createTower(int type, bool playerControlled, glm::vec3 position)
 {
-	towers.push_back(new Tower(type, glm::vec3((playerControlled) ? -1 : 1, 1, 1), position, unitTextures[type], numElem));
-}
-
-//gets the mouse position
-glm::vec2 Castle::getMousePosition()
-{
-	//holds the mouse positions
-	double xpos, ypos;
-	//gets the mouse positions
-	glfwGetCursorPos(Window::getWindow(), &xpos, &ypos);
-	//returns a vector with the mouse positions in relation to the window size
-	return glm::vec2(xpos, ypos);
+	towers.push_back(new Tower(type, playerControlled, glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), position, towerTextures[type], projectileTextures[type], numElem));
 }
 
 //update function
-void Castle::update(double deltaTime)
+void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCastles)
 {
 	//player controls
 	if (playerControlled)
@@ -52,8 +47,33 @@ void Castle::update(double deltaTime)
 		static int oldState = GLFW_RELEASE;
 		int newState = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
 		if (newState == GLFW_RELEASE && oldState == GLFW_PRESS) {
-			std::cout << "left mouse" << std::endl;
+			std::cout << mousePosition.x << std::endl;
+			std::cout << position.x << std::endl;
 		}
 		oldState = newState;
 	}
+
+	//update towers
+	for (int i = 0; i < towers.size(); i++)
+	{
+		towers.at(i)->update(deltaTime,otherCastles->getUnits());
+	}
+}
+
+//renders entitys of castle
+void Castle::render(Shader& shader)
+{
+	//renders towers
+	for (int i = 0; i < towers.size(); i++)
+	{
+		towers.at(i)->render(shader);
+	}
+
+	//renders units
+	for (int i = 0; i < units.size(); i++)
+	{
+		units.at(i)->render(shader);
+	}
+	
+	GameObject::render(shader);
 }

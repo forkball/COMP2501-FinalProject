@@ -10,14 +10,20 @@ Camera::~Camera()
 {
 }
 
+//gets the mouse position
 glm::vec2 Camera::getMousePosition()
 {
 	//holds the mouse positions
 	double xpos, ypos;
 	//gets the mouse positions
-	glfwGetCursorPos(window.getWindow(), &xpos, &ypos);
+	glfwGetCursorPos(Window::getWindow(), &xpos, &ypos);
+
+	//transforms cursor position to screen coordinates
+	float cursor_x_pos = (xpos / (float)(800 / 2)) - 1.0f;
+	float cursor_y_pos = (ypos / (float)(600 / 2)) - 1.0f;
+
 	//returns a vector with the mouse positions in relation to the window size
-	return glm::vec2((-xpos / (windowSize.x / 2) + 1), (ypos / (windowSize.y / 2) - 1));
+	return glm::vec2(cursor_x_pos, cursor_y_pos);
 }
 
 void Camera::update(double deltaTime) 
@@ -26,7 +32,7 @@ void Camera::update(double deltaTime)
 	glm::vec2 mousePosition(getMousePosition());
 	if ((glm::abs(glm::length(mousePosition)) > panningThreshold) && ((position.x >= -6) && (position.x <= 6)))
 	{
-		position.x += (mousePosition.x * panningSpeed) * deltaTime;
+		position.x += (-mousePosition.x * panningSpeed) * deltaTime;
 	}
 	else {
 		if (position.x <= -6) position.x += panningSpeed * deltaTime;

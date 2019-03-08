@@ -18,6 +18,7 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Board.h"
+#include "Projectile.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -30,8 +31,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.5, 0.0);
 
 // Global texture info
-GLuint tex[4];
-
+GLuint tex[7];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -95,15 +95,17 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(4, tex);
+	glGenTextures(6, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
-	setthisTexture(tex[2], "rock.png");
-	setthisTexture(tex[3], "orb.png");
+	setthisTexture(tex[2], "knight1.png");
+	setthisTexture(tex[3], "knight2.png");
+	setthisTexture(tex[4], "tower1.png");
+	setthisTexture(tex[5], "tower2.png");
+	setthisTexture(tex[6], "proj1.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
-
 
 // Main function that builds and runs the game
 int main(void){
@@ -130,19 +132,22 @@ int main(void){
 
 		// Set up the textures
 		setallTexture();
-		vector<GLuint> castleOneUnitTextures = { tex[0] };
-		vector<GLuint> castleTwoUnitTextures = { tex[0] };
+		vector<GLuint> castleOneUnitTextures = { tex[2] };
+		vector<GLuint> castleTwoUnitTextures = { tex[3] };
 
-		vector<GLuint> castleOneTowerTextures = { tex[0] };
-		vector<GLuint> castleTwoTowerTextures = { tex[0] };
+		vector<GLuint> castleOneProjectileTextures = { tex[6] };
+		vector<GLuint> castleTwoProjectileTextures = { tex[6] };
 
-		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0,0),glm::vec3(1,1,1),tex[0],size,castleOneUnitTextures,castleOneTowerTextures), 
-									new Castle(1,glm::vec3(6,0,0),glm::vec3(-1,1,1),tex[1],size,castleTwoUnitTextures,castleTwoTowerTextures)};
+		vector<GLuint> castleOneTowerTextures = { tex[4] };
+		vector<GLuint> castleTwoTowerTextures = { tex[5] };
+
+		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0,0),glm::vec3(1,1,1),tex[0],size,castleOneProjectileTextures,castleOneUnitTextures,castleOneTowerTextures),
+									new Castle(1,glm::vec3(6,0,0),glm::vec3(-1,1,1),tex[1],size,castleTwoProjectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
 		Camera* camera = new Camera(shader,window,glm::vec2(window_width_g,window_height_g));
-		Board* board = new Board(castles);
+		Board* board = new Board(camera,castles);
 
 		while (!glfwWindowShouldClose(window.getWindow())) {
 			// Clear background
@@ -151,14 +156,13 @@ int main(void){
 			// Calculate delta time
 			double currentTime = glfwGetTime();
 			double deltaTime = currentTime - lastTime;
-			lastTime = currentTime;
+			lastTime = currentTime; 
 
 			// Select proper shader program to use
 			shader.enable();
 
 			// Setup camera to focus on the player object (the first object in the gameObjects array)
 			camera->update(deltaTime);
-
 			//game entity rendering
 			board->render(shader);
 			//game entity updating

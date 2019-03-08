@@ -9,6 +9,8 @@
 #include <ctime>
 
 #include "Shader.h"
+#include "Window.h"
+#include "Camera.h"
 
 class GameObject {
 public:
@@ -23,7 +25,6 @@ public:
 	// Getters
 	inline glm::vec3& getPosition() { return position; }
 	inline float getOrientation() { return orientation; }
-
 	// Setters
 	inline void setPosition(glm::vec3& newPosition) { position = newPosition; }
 protected:

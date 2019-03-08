@@ -1,9 +1,10 @@
 #include "Unit.h"
 
 
-Unit::Unit(int type, glm::vec3 scale, glm::vec3 &entityPosition, GLuint entityTexture, GLint entityNumElements) : GameObject (entityPosition,entityTexture,entityNumElements), type(type)
+Unit::Unit(int type, bool playerControlled, glm::vec3 unitScale, glm::vec3 &entityPosition, GLuint entityTexture, GLint entityNumElements) 
+	: GameObject (entityPosition,entityTexture,entityNumElements), type(type)
 {
-	scale = glm::vec3(1);
+	scale = unitScale;
 }
 
 Unit::~Unit()
@@ -12,6 +13,7 @@ Unit::~Unit()
 
 void Unit::update(double deltaTime)
 {
+	//handles behavior of each unit type
 	switch (type)
 	{
 	case 0:

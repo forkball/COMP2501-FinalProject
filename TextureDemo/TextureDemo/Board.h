@@ -3,12 +3,13 @@
 #include "Unit.h"
 #include "Tower.h"
 #include "Shader.h"
+#include "Camera.h"
 
 using namespace std;
 class Board
 {
 public:
-	Board(vector<Castle*> castles);
+	Board(Camera* camera, vector<Castle*> castles);
 	~Board();
 
 	//updates entities
@@ -16,6 +17,7 @@ public:
 	// Renders the board entities using a shader
 	void render(Shader &shader);
 private:
+	Camera* camera;
 	vector<Castle*> castles;
 };
 
