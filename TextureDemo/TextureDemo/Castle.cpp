@@ -58,6 +58,18 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	{
 		towers.at(i)->update(deltaTime,otherCastles->getUnits());
 	}
+
+	for (int i = 0; i < units.size(); i++)
+	{
+		Unit* unit = units.at(i);
+		unit->update(deltaTime);
+		if (unit->getHealth() <= 0)
+		{
+			unit = NULL;
+			delete unit;
+			units.erase(units.begin() + i);
+		}
+	}
 }
 
 //renders entitys of castle

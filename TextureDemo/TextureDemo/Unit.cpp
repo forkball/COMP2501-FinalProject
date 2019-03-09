@@ -5,6 +5,7 @@ Unit::Unit(int type, bool playerControlled, glm::vec3 unitScale, glm::vec3 &enti
 	: GameObject (entityPosition,entityTexture,entityNumElements), type(type)
 {
 	scale = unitScale;
+	health = 100;
 }
 
 Unit::~Unit()

@@ -163,10 +163,10 @@ int main(void){
 
 			// Setup camera to focus on the player object (the first object in the gameObjects array)
 			camera->update(deltaTime);
-			//game entity rendering
-			board->render(shader);
 			//game entity updating
 			board->update(deltaTime);
+			//game entity rendering
+			board->render(shader);
 
 			// Update other events like input handling
 			glfwPollEvents();

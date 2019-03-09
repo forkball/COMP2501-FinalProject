@@ -1,16 +1,13 @@
 #include "Projectile.h"
 
-Projectile::Projectile(glm::vec3 &entityPos, GLuint texture, GLint entityNumElements, float orientation, float speed)
-	: GameObject(entityPos, texture, entityNumElements), speed(speed), orientation(orientation)
+Projectile::Projectile(glm::vec3 &entityPos, GLuint texture, GLint entityNumElements, glm::vec2 dir, float speed, double damage)
+	: GameObject(entityPos, texture, entityNumElements), speed(speed), direction(dir), damage(damage)
 {
-	scale = glm::vec3(1.0f);
+	scale = glm::vec3(0.1f);
 }
 
 void Projectile::update(double deltaTime) {
 	// Update object position
-	//direction.x = (float)glm::cos(orientation * (glm::pi<float>() / 180));
-	//direction.y = (float)glm::sin(orientation * (glm::pi<float>() / 180));
-	//direction = glm::normalize(direction);
-	//position.x += (direction.x * speed) ;
-	//position.y += (direction.y * speed);
+	position.x += (direction.x * speed) * deltaTime;
+	position.y += (direction.y * speed) * deltaTime;
 }
