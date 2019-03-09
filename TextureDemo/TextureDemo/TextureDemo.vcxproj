@@ -155,8 +155,10 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Castle.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FileUtils.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Tower.cpp" />
@@ -169,6 +171,8 @@
     <ClInclude Include="Castle.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Tower.h" />

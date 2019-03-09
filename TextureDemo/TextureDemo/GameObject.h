@@ -30,7 +30,7 @@ public:
 protected:
 	// Object's Transform Variables
 	glm::vec3 position;
-	glm::vec3 scale;
+	glm::vec3 scale = glm::vec3(0.1f);
 	//holds direction
 	glm::vec2 direction = glm::vec2(0.0f);
 	float orientation;

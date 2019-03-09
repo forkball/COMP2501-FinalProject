@@ -8,6 +8,10 @@ Tower::Tower(int type, bool playerControlled, glm::vec3 towerScale, glm::vec3 &e
 
 Tower::~Tower()
 {
+	for (int i = 0; i < projectiles.size(); i++)
+	{
+		removeProjectile(i);
+	}
 }
 
 void Tower::update(double deltaTime, vector<Unit*> enemies)

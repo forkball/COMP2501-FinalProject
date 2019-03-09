@@ -19,6 +19,7 @@
 #include "Camera.h"
 #include "Board.h"
 #include "Projectile.h"
+#include "Graph.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -28,10 +29,10 @@
 const std::string window_title_g = "Final Assignment - Tower Defense";
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
-const glm::vec3 viewport_background_color_g(0.0, 0.5, 0.0);
+const glm::vec3 viewport_background_color_g(0.0, 0.3, 0.0);
 
 // Global texture info
-GLuint tex[7];
+GLuint tex[8];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -95,7 +96,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(6, tex);
+	glGenTextures(7, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "knight1.png");
@@ -103,6 +104,7 @@ void setallTexture(void)
 	setthisTexture(tex[4], "tower1.png");
 	setthisTexture(tex[5], "tower2.png");
 	setthisTexture(tex[6], "proj1.png");
+	setthisTexture(tex[7], "orb.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
@@ -141,13 +143,14 @@ int main(void){
 		vector<GLuint> castleOneTowerTextures = { tex[4] };
 		vector<GLuint> castleTwoTowerTextures = { tex[5] };
 
-		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0,0),glm::vec3(1,1,1),tex[0],size,castleOneProjectileTextures,castleOneUnitTextures,castleOneTowerTextures),
-									new Castle(1,glm::vec3(6,0,0),glm::vec3(-1,1,1),tex[1],size,castleTwoProjectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
+		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,castleOneProjectileTextures,castleOneUnitTextures,castleOneTowerTextures),
+									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,castleTwoProjectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
 		Camera* camera = new Camera(shader,window,glm::vec2(window_width_g,window_height_g));
-		Board* board = new Board(camera,castles);
+		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
+		Board* board = new Board(camera,castles,graph);
 
 		while (!glfwWindowShouldClose(window.getWindow())) {
 			// Clear background
@@ -167,7 +170,6 @@ int main(void){
 			board->update(deltaTime);
 			//game entity rendering
 			board->render(shader);
-
 			// Update other events like input handling
 			glfwPollEvents();
 

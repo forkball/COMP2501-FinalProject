@@ -4,12 +4,13 @@
 #include "Tower.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Graph.h"
 
 using namespace std;
 class Board
 {
 public:
-	Board(Camera* camera, vector<Castle*> castles);
+	Board(Camera* camera, vector<Castle*> castles, Graph* graph);
 	~Board();
 
 	//updates entities
@@ -17,6 +18,7 @@ public:
 	// Renders the board entities using a shader
 	void render(Shader &shader);
 private:
+	Graph* graph;
 	Camera* camera;
 	vector<Castle*> castles;
 };

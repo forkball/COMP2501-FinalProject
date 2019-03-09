@@ -5,11 +5,17 @@ Castle::Castle(bool playerControlled ,glm::vec3 &entityPosition, glm::vec3 sprit
 	GameObject(entityPosition, entityTexture, entityNumElements), playerControlled(playerControlled), projectileTextures(projectileTextures), unitTextures(unitTextures), numElem(entityNumElements), towerTextures(towerTextures)
 {
 	scale = spriteScale;
-	if (playerControlled) {
-		createTower(0, playerControlled, position + glm::vec3(-1.5, 0.5, 0));
-		createUnit(0, playerControlled, position + glm::vec3(-1.5, -0.1, 0));
+	if (!playerControlled) {
+		createTower(0, playerControlled, position + glm::vec3(1.5, 0, 0));
+		createUnit(0, playerControlled, position + glm::vec3(1.5, -0.5, 0));
+		createUnit(0, playerControlled, position + glm::vec3(1.6, -0.6, 0));
+		createUnit(0, playerControlled, position + glm::vec3(1.5, -0.7, 0));
 	} else {
-		createUnit(0, 0, position + glm::vec3(10, -0.1, 0));
+		createTower(0, playerControlled, position + glm::vec3(-1.5, 0, 0));
+		createUnit(0, playerControlled, position + glm::vec3(-1.5, -0.5, 0));
+		createUnit(0, playerControlled, position + glm::vec3(-1.6, -0.6, 0));
+		createUnit(0, playerControlled, position + glm::vec3(-1.5, -0.7, 0));
+
 	}
 }
 
@@ -29,7 +35,7 @@ Castle::~Castle()
 //creates a new unit
 void Castle::createUnit(int type, bool playerControlled, glm::vec3 position)
 {
-	units.push_back(new Unit(type, playerControlled, glm::vec3((playerControlled) ? -0.15 : 0.15, 0.2, 1), position, unitTextures[type], numElem));
+	units.push_back(new Unit(type, playerControlled, glm::vec3((playerControlled) ? -0.1 : 0.1, 0.15, 1), position, unitTextures[type], numElem));
 }
 
 //creates a new tower
