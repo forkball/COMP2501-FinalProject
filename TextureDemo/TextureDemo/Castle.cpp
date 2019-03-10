@@ -1,4 +1,5 @@
 #include "Castle.h"
+#include <time.h>
 
 //constructor
 Castle::Castle(bool playerControlled,
@@ -19,19 +20,13 @@ Castle::Castle(bool playerControlled,
 	  towerTextures(towerTextures)
 {
 	scale = spriteScale;
+	spawnTimer = glfwGetTime();
 	if (!playerControlled) {
 		createTower(0, playerControlled, position + glm::vec3(2.0, 0, 0));
 		createTower(0, playerControlled, position + glm::vec3(3.5, 0, 0));
-		createUnit(0, playerControlled,  glm::vec3(-4.92, -0.32, 0));
-		createUnit(0, playerControlled,  glm::vec3(-4.74, -0.58, 0));
-		createUnit(0, playerControlled, glm::vec3(-4.92, -0.84, 0));
 	} else {
 		createTower(0, playerControlled, position + glm::vec3(-2.0, 0, 0));
 		createTower(0, playerControlled, position + glm::vec3(-3.5, 0, 0));
-		//createUnit(0, playerControlled,  glm::vec3(4.98, -0.32, 0));
-		//createUnit(0, playerControlled,  glm::vec3(4.8, -0.58, 0));
-		//createUnit(0, playerControlled,  glm::vec3(4.98, -0.84, 0));
-
 	}
 }
 
@@ -55,7 +50,7 @@ void Castle::createUnit(int type, bool playerControlled, glm::vec3 position)
 							 playerControlled, 
 							 graph,
 							 glm::vec3((playerControlled) ? -0.1 : 0.1, 0.15, 1),
-							 (playerControlled) ? glm::vec2(-6, -0.32) : glm::vec2(6, -0.32),
+							 (playerControlled) ? glm::vec2(-6.06, -0.32) : glm::vec2(6.06, -0.32),
 							 position, 
 							 unitTextures[type], 
 							 numElem));
@@ -86,6 +81,17 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 			std::cout << position.x << std::endl;
 		}
 		oldState = newState;
+	}
+	else 
+	{
+		if ((glfwGetTime() - spawnTimer) > spawnDelay) 
+		{
+			srand(time(NULL));
+			double heights[] = { -0.32,-0.58,-0.84 };
+			spawnTimer = glfwGetTime();
+			createUnit(0, playerControlled, glm::vec3(-4.92, heights[(int)rand() % 3], 0));
+
+		}
 	}
 
 	//update towers

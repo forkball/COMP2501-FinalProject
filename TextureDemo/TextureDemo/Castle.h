@@ -41,6 +41,8 @@ private:
 	//holds textures of projectiles
 	std::vector<GLuint> projectileTextures;
 	bool playerControlled;
-	double health;
+	double health,
+		spawnDelay = 5,
+		spawnTimer = 0;
 };
 

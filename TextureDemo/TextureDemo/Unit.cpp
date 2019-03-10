@@ -25,14 +25,14 @@ void Unit::update(double deltaTime)
 	switch (type)
 	{
 	case 0:
-		if (position.x >= path.at(0).x && position.y >= path.at(0).y) {
-			path.erase(path.begin());
+		if (path.size() > 0) {
+			if (position.x >= path.at(0).x && position.y >= path.at(0).y) 
+				path.erase(path.begin());
+			else if (position.x < path.at(0).x)
+				position.x += movementSpeed * deltaTime;
+			else if (position.y < path.at(0).y)
+				position.y += movementSpeed * deltaTime;
 		}
-		else if (position.x < path.at(0).x)
-			position.x += movementSpeed * deltaTime;
-		else if (position.y < path.at(0).y)
-			position.y += movementSpeed * deltaTime;
-		std::cout << path.at(0).x << " " << position.x << std::endl;
 		break;
 	case 1:
 		break;
