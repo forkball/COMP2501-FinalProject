@@ -8,6 +8,6 @@ Projectile::Projectile(glm::vec3 &entityPos, GLuint texture, GLint entityNumElem
 
 void Projectile::update(double deltaTime) {
 	// Update object position
-	position.x += (direction.x * speed) * deltaTime;
-	position.y += (direction.y * speed) * deltaTime;
+	position.x += (double) (direction.x * speed) * deltaTime;
+	position.y += (double) (direction.y * speed) * deltaTime;
 }

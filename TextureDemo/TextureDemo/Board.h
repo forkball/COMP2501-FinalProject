@@ -10,7 +10,7 @@ using namespace std;
 class Board
 {
 public:
-	Board(Camera* camera, vector<Castle*> castles, Graph* graph);
+	Board(Camera* camera, vector<Castle*> castles);
 	~Board();
 
 	//updates entities
@@ -18,7 +18,6 @@ public:
 	// Renders the board entities using a shader
 	void render(Shader &shader);
 private:
-	Graph* graph;
 	Camera* camera;
 	vector<Castle*> castles;
 };

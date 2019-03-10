@@ -1,4 +1,4 @@
-// COMP 2501 Assignment 2
+// COMP 2501 Final Project
 // Eros Di Pede (101035030)
 #include <iostream>
 #include <stdexcept>
@@ -18,8 +18,8 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Board.h"
-#include "Projectile.h"
 #include "Graph.h"
+#include "Projectile.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -96,7 +96,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(7, tex);
+	glGenTextures(8, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "knight1.png");
@@ -143,16 +143,17 @@ int main(void){
 		vector<GLuint> castleOneTowerTextures = { tex[4] };
 		vector<GLuint> castleTwoTowerTextures = { tex[5] };
 
-		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,castleOneProjectileTextures,castleOneUnitTextures,castleOneTowerTextures),
-									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,castleTwoProjectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
+		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
+
+		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,graph,castleOneProjectileTextures,castleOneUnitTextures,castleOneTowerTextures),
+									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,graph,castleTwoProjectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
 		Camera* camera = new Camera(shader,window,glm::vec2(window_width_g,window_height_g));
-		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
-		Board* board = new Board(camera,castles,graph);
+		Board* board = new Board(camera,castles);
 
-		while (!glfwWindowShouldClose(window.getWindow())) {
+		while (!glfwWindowShouldClose(window.getWindow())) { 
 			// Clear background
 			window.clear(viewport_background_color_g);	
 
@@ -163,13 +164,14 @@ int main(void){
 
 			// Select proper shader program to use
 			shader.enable();
-
 			// Setup camera to focus on the player object (the first object in the gameObjects array)
 			camera->update(deltaTime);
 			//game entity updating
 			board->update(deltaTime);
 			//game entity rendering
 			board->render(shader);
+
+			graph->render(shader);
 			// Update other events like input handling
 			glfwPollEvents();
 

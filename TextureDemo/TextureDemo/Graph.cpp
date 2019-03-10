@@ -1,5 +1,4 @@
 #include "Graph.h"
-
 #include <iostream>	//used for debug purposes
 using namespace std;
 
@@ -84,35 +83,12 @@ void Graph::printData() {
 	}
 }
 
-//gets mouse input, updates start and end position using that information
-void Graph::update() {
-	double xpos, ypos;
-	glfwGetCursorPos(Window::getWindow(), &xpos, &ypos);
-
-	//adds an obstacle
-	if (glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-		double xpos, ypos;
-		glfwGetCursorPos(Window::getWindow(), &xpos, &ypos);
-		//gets the node corresponding the mouseclick
-		int n = selectNode(xpos, ypos);
-
-		//set the start to selected node, if node exists and is not the start-node.
-		if (n != -1 && n != getStartId() && n != getEndId()) {
-			for (int i = 0; i < getNode(n).getEdges().size(); i++) {
-				getNode(n).getEdges().at(i).cost = 1000;
-			}
-			getNode(n).setObstacle(true);
-			getNode(n).setOnPath(false);
-		}
-	}
-}
-
 //returns the id of the node at the screen coordinates. If no node exists, it will return -1
 int Graph::getNodeIdFromCoords(double _x, double _y) {
-	float start_x = -4.4f;
-	float start_y = -4.4f;
-	float movementX = 0.22f;
-	float movementY = 0.3f;
+	float start_x = -6.0f;
+	float start_y = 0.2f;
+	float movementX = 0.18f;
+	float movementY = -0.26f;
 
 	start_x -= movementX * .5;
 	start_y -= movementY * .5;
@@ -153,6 +129,7 @@ int Graph::selectNode(double x, double y) {
 }
 
 //renders all the nodes in the graph
+//renders all the nodes in the graph
 void Graph::render(Shader &shader) {
 
 	//goes through each node and renders it, using the provided gameObject
@@ -175,23 +152,6 @@ void Graph::render(Shader &shader) {
 			//set the color of the node via the color uniform. Default is dark green
 			glUniform3f(color_loc, -0.2f, -0.2f, -0.2f);	//dark green
 
-			//change the color uniform depending on if the node is the start or end node.
-			if (currentNode.isObstacle()) {
-				glUniform3f(color_loc, -1.0f, -1.0f, -1.0f); // black if wall
-			}
-			else if (currentNode.getId() == startNodeId) {
-				glUniform3f(color_loc, 1.0f, -1.0f, -1.0f);	//red = start
-			}
-			else if (currentNode.getId() == endNodeId) {
-				glUniform3f(color_loc, -1.0f, -1.0f, 1.0f); //blue = end
-			}
-			else if (currentNode.isOnPath()) {
-				glUniform3f(color_loc, 0.0f, 0.0f, 0.0f);	//light green = on path
-			}
-			else if (currentNode.wasVisited()) {
-				glUniform3f(color_loc, 1.0f, 1.0f, 1.0f);   //white if visited
-			}
-
 			nodeObj.render(shader);
 		}
 	}
@@ -205,8 +165,12 @@ Node& Graph::getNode(int id) {
 }
 
 //using zombie-key based approach to Djikstra's algorithm
-void Graph::pathfind() {
-	finalPath.clear();
+std::vector<glm::vec2> Graph::pathfind(glm::vec2 start, glm::vec2 end) {
+	int startNodeId = getNodeIdFromCoords(start.x, start.y),
+		endNodeId = getNodeIdFromCoords(end.x, end.y);
+	std::cout << endNodeId << std::endl;
+	//final path
+	vector<glm::vec2> finalPath;
 	//priority queue used in pathfinding.
 	//it is created using the NodeTuple struct with a min compare function called compareNode
 	priority_queue <QNode, vector<QNode>, compareNode> pq;
@@ -223,7 +187,6 @@ void Graph::pathfind() {
 	//The startnode is added to the pq with cost 0
 	QNode startNode = { &getNode(startNodeId), 0 };
 	pq.push(startNode);
-
 
 	//now that the pq is setup, we can start the algorithm
 	//keep in mind that the as the QNode struct has a pointer to the corresponding node
@@ -270,8 +233,10 @@ void Graph::pathfind() {
 	//while the current node isn't null, or the end, mark the current node as on the path
 	while (currentNode != NULL && currentNode->getId() != startNodeId) {
 		currentNode->setOnPath(true);
-		finalPath.insert(finalPath.begin(), currentNode->getId());
+		finalPath.insert(finalPath.begin(), glm::vec2(currentNode->getX(),currentNode->getY()));
 		currentNode = currentNode->getPrev();
 	}
+
+	return finalPath;
 
 }

@@ -18,7 +18,7 @@ public:
 	~Tower();
 	void update(double deltaTime, vector<Unit*> enemies);
 	void render(Shader &shader);
-	void shoot(glm::vec3 target);
+	void shoot(glm::vec3 target, int damage);
 	void removeProjectile(int index);
 	inline vector<Projectile*> getProjectiles() { return projectiles; }
 private:
@@ -28,7 +28,7 @@ private:
 	GLuint projectileTexture;
 	GLuint size;
 	vector<Projectile*> projectiles;
-	float shootingRange = 0.5, 
+	double shootingRange = 0.5, 
 		  projectileTimer = glfwGetTime(), 
 		  projectileDelay = 2;
 };

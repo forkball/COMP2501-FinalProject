@@ -32,11 +32,11 @@ void Camera::update(double deltaTime)
 	glm::vec2 mousePosition(getMousePosition());
 	if ((glm::abs(glm::length(mousePosition)) > panningThreshold) && ((position.x >= -6) && (position.x <= 6)))
 	{
-		position.x += (-mousePosition.x * panningSpeed) * deltaTime;
+		position.x += (double) (-mousePosition.x * panningSpeed) * deltaTime;
 	}
 	else {
-		if (position.x <= -6) position.x += panningSpeed * deltaTime;
-		if (position.x >= 6) position.x -= panningSpeed * deltaTime;
+		if (position.x <= -6) position.x += (double) panningSpeed * deltaTime;
+		if (position.x >= 6) position.x -= (double) panningSpeed * deltaTime;
 	}
 	glm::vec3 cameraTranslatePos(glm::vec3(position.x, position.y, 0.0f));
 	//scaling updates

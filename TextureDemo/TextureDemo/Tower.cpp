@@ -14,16 +14,17 @@ Tower::~Tower()
 	}
 }
 
+//update tower logic
 void Tower::update(double deltaTime, vector<Unit*> enemies)
 {
-	//handles behavior of each tower type
+	#pragma region Tower Behaviors
 	switch (type)
 	{
 	case 0:
 		for (int i = 0; i < enemies.size(); i++) {
 			if (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange) {
 				if ((glfwGetTime() - projectileTimer) > projectileDelay) {
-					shoot(enemies.at(i)->getPosition());
+					shoot(enemies.at(i)->getPosition(),50);
 					projectileTimer = glfwGetTime();
 				}
 			}
@@ -32,10 +33,12 @@ void Tower::update(double deltaTime, vector<Unit*> enemies)
 	case 1:
 		break;
 	}
-
-	//projectile control
+	#pragma endregion
+	
+	#pragma region Projectile Collisions
 	for (int i = 0; i < projectiles.size(); i++)
 	{
+		bool hit = false;
 		Projectile* proj = projectiles.at(i);
 		proj->update(deltaTime);
 		double playerDist = sqrt(pow(getPosition().x - proj->getPosition().x, 2) + pow(getPosition().y - proj->getPosition().y, 2));
@@ -53,12 +56,17 @@ void Tower::update(double deltaTime, vector<Unit*> enemies)
 				{
 					enem->takeDamage(proj->getDamage());
 					removeProjectile(i);
+					break;
 				}
 			}
 		}
 	}
+
+
+	#pragma endregion
 }
 
+//renders tower and projectiles
 void Tower::render(Shader& shader)
 {
 	for (int i = 0; i < projectiles.size(); i++)
@@ -69,6 +77,7 @@ void Tower::render(Shader& shader)
 	GameObject::render(shader);
 }
 
+//removes projectile from vector
 void Tower::removeProjectile(int index)
 {
 	Projectile* proj = projectiles.at(index);
@@ -77,12 +86,13 @@ void Tower::removeProjectile(int index)
 	projectiles.erase(projectiles.begin() + index);
 }
 
-void Tower::shoot(glm::vec3 target)
+//shoots projectiles at target
+void Tower::shoot(glm::vec3 target,int damage)
 {
 	double horDiff = target.x - position.x;
 	double verDiff = target.y - (position.y + 0.2);
 	double dist = sqrt((horDiff * horDiff) + (verDiff * verDiff));
 	double unitVectorX = horDiff / dist;
 	double unitVectorY = verDiff / dist;
-	projectiles.push_back(new Projectile(position + glm::vec3(0,0.2,0), projectileTexture, size, glm::vec2(unitVectorX,unitVectorY), 2,25));
+	projectiles.push_back(new Projectile(position + glm::vec3(0,0.2,0), projectileTexture, size, glm::vec2(unitVectorX,unitVectorY), 2, damage));
 }

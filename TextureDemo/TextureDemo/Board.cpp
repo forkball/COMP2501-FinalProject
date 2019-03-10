@@ -1,7 +1,7 @@
 #include "Board.h"
 
-Board::Board(Camera* camera, vector<Castle*> castles, Graph* graph) 
-	: camera(camera),castles(castles), graph(graph)
+Board::Board(Camera* camera, vector<Castle*> castles) 
+	: camera(camera),castles(castles)
 {
 }
 
@@ -13,8 +13,6 @@ Board::~Board()
 		delete castles.at(0);
 		castles.erase(castles.begin());
 	}
-	graph = NULL;
-	delete graph;
 }
 
 void Board::update(double deltaTime)
@@ -35,5 +33,4 @@ void Board::render(Shader &shader)
 	{
 		castles.at(i)->render(shader);
 	}
-	graph->render(shader);
 }

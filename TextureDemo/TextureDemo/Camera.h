@@ -33,12 +33,12 @@ private:
 	glm::vec2 windowSize;
 
 	//panning speed of camera
-	float panningSpeed = 3;
-	float panningThreshold = 0.7;
+	double panningSpeed = 3;
+	double panningThreshold = 0.7;
 	
 	//controls how zoomed in the camera is
 	float zoom = 0.5f;
-	float zoomSpeed = 0.0007f;
+	float zoomSpeed = 0.001f;
 
 	Shader shader;
 	Window window;
