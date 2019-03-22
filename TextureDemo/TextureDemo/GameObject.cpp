@@ -32,7 +32,6 @@ void GameObject::render(Shader &shader) {
 	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
 
 	// Set the transformation matrix in the shader
-	// TODO: Multiply your new transformations to make the transformationMatrix
 	glm::mat4 transformationMatrix = translationMatrix * rotationMatrix * scaleMatrix;
 	shader.setUniformMat4("transformationMatrix", transformationMatrix);
 

@@ -6,6 +6,8 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <GL/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp> 
 
 #include "FileUtils.h"
 
@@ -37,6 +39,9 @@ public:
 
 	// Getters
 	inline GLuint getShaderID() { return shaderProgram; }
-private:
+	//sets shader attributes
+	virtual void setAttributes();
+
+protected:
 	GLuint shaderProgram;
 };

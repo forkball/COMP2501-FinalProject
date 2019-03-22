@@ -20,6 +20,7 @@
 #include "Board.h"
 #include "Graph.h"
 #include "Projectile.h"
+#include "ParticleSystem.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -32,7 +33,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.3, 0.0);
 
 // Global texture info
-GLuint tex[8];
+GLuint tex[9];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -96,7 +97,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(8, tex);
+	glGenTextures(9, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "knight1.png");
@@ -105,6 +106,7 @@ void setallTexture(void)
 	setthisTexture(tex[5], "tower2.png");
 	setthisTexture(tex[6], "proj1.png");
 	setthisTexture(tex[7], "orb.png");
+	setthisTexture(tex[8], "flame.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
@@ -131,6 +133,9 @@ int main(void){
 
 		// Set up shaders
 		Shader shader("shader.vert", "shader.frag");
+
+		ParticleSystem particleSystem("particle.vert", "shader.frag");
+		particleSystem.createParticleArray();
 
 		// Set up the textures
 		setallTexture();
@@ -164,6 +169,8 @@ int main(void){
 
 			// Select proper shader program to use
 			shader.enable();
+			shader.setAttributes();
+
 			// Setup camera to focus on the player object (the first object in the gameObjects array)
 			camera->update(deltaTime);
 			//game entity updating
@@ -171,7 +178,11 @@ int main(void){
 			//game entity rendering
 			board->render(shader);
 
-			graph->render(shader);
+			//particle system set up
+			particleSystem.enable();
+			particleSystem.setAttributes();
+			particleSystem.drawParticles(glm::vec3(0.0),tex[8], 1000);
+
 			// Update other events like input handling
 			glfwPollEvents();
 
