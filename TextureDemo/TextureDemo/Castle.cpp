@@ -22,11 +22,11 @@ Castle::Castle(bool playerControlled,
 	scale = spriteScale;
 	spawnTimer = glfwGetTime();
 	if (!playerControlled) {
-		createTower(0, playerControlled, position + glm::vec3(2.0, 0, 0));
-		createTower(0, playerControlled, position + glm::vec3(3.5, 0, 0));
+		createTower((int)rand() % 3, playerControlled, position + glm::vec3(2.0, 0, 0));
+		createTower((int)rand() % 3, playerControlled, position + glm::vec3(3.5, 0, 0));
 	} else {
-		createTower(0, playerControlled, position + glm::vec3(-2.0, 0, 0));
-		createTower(0, playerControlled, position + glm::vec3(-3.5, 0, 0));
+		createTower((int)rand() % 3, playerControlled, position + glm::vec3(-2.0, 0, 0));
+		createTower((int)rand() % 3, playerControlled, position + glm::vec3(-3.5, 0, 0));
 	}
 }
 
@@ -46,8 +46,26 @@ Castle::~Castle()
 //creates a new unit
 void Castle::createUnit(int type, bool playerControlled, glm::vec3 position)
 {
+	double health, movementSpeed;
+	//sets unit stats based of type
+	switch (type) {
+	case 0:
+		health = 75; movementSpeed = 0.15;
+		break;
+	case 1:
+		health = 50; movementSpeed = 0.2;
+		break;
+	case 2: 
+		health = 100; movementSpeed = 0.1;
+		break;
+	case 3:
+		health = 75; movementSpeed = 0.3;
+		break;
+	}
 	units.push_back(new Unit(type, 
+							 health,
 							 playerControlled, 
+					         movementSpeed,
 							 graph,
 							 glm::vec3((playerControlled) ? -0.1 : 0.1, 0.15, 1),
 							 (playerControlled) ? glm::vec2(-6.06, -0.32) : glm::vec2(6.06, -0.32),
@@ -64,7 +82,7 @@ void Castle::createTower(int type, bool playerControlled, glm::vec3 position)
 		                       glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), 
 							   position, 
 							   towerTextures[type], 
-							   projectileTextures[type], 
+							   projectileTextures[0], 
 							   numElem));
 }
 
@@ -74,6 +92,7 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	//player controls
 	if (playerControlled)
 	{
+
 		static int oldState = GLFW_RELEASE;
 		int newState = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
 		if (newState == GLFW_RELEASE && oldState == GLFW_PRESS) {
@@ -89,7 +108,7 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 			srand(time(NULL));
 			double heights[] = { -0.32,-0.58,-0.84 };
 			spawnTimer = glfwGetTime();
-			createUnit(0, playerControlled, glm::vec3(-4.92, heights[(int)rand() % 3], 0));
+			createUnit((int)rand() % 4, playerControlled, glm::vec3(-4.92, heights[(int)rand() % 3], 0));
 
 		}
 	}

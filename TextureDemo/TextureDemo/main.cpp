@@ -33,7 +33,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.3, 0.0);
 
 // Global texture info
-GLuint tex[9];
+GLuint tex[19];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -97,16 +97,26 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(9, tex);
+	glGenTextures(19, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "knight1.png");
 	setthisTexture(tex[3], "knight2.png");
-	setthisTexture(tex[4], "tower1.png");
-	setthisTexture(tex[5], "tower2.png");
-	setthisTexture(tex[6], "proj1.png");
-	setthisTexture(tex[7], "orb.png");
-	setthisTexture(tex[8], "flame.png");
+	setthisTexture(tex[4], "cavalry1.png");
+	setthisTexture(tex[5], "cavalry2.png");
+	setthisTexture(tex[6], "archer1.png");
+	setthisTexture(tex[7], "archer2.png");
+	setthisTexture(tex[8], "catapult1.png");
+	setthisTexture(tex[9], "catapult2.png");
+	setthisTexture(tex[10], "tower1.png");
+	setthisTexture(tex[11], "tower2.png");
+	setthisTexture(tex[12], "magma1.png");
+	setthisTexture(tex[13], "magma2.png");
+	setthisTexture(tex[14], "ice1.png");
+	setthisTexture(tex[15], "ice2.png");
+	setthisTexture(tex[16], "proj1.png");
+	setthisTexture(tex[17], "orb.png");
+	setthisTexture(tex[18], "flame.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
@@ -139,14 +149,14 @@ int main(void){
 
 		// Set up the textures
 		setallTexture();
-		vector<GLuint> castleOneUnitTextures = { tex[2] };
-		vector<GLuint> castleTwoUnitTextures = { tex[3] };
+		vector<GLuint> castleOneUnitTextures = { tex[2], tex[6], tex[8], tex[4] };
+		vector<GLuint> castleTwoUnitTextures = { tex[3], tex[7], tex[9], tex[5] };
 
-		vector<GLuint> castleOneProjectileTextures = { tex[6] };
-		vector<GLuint> castleTwoProjectileTextures = { tex[6] };
+		vector<GLuint> castleOneProjectileTextures = { tex[16] };
+		vector<GLuint> castleTwoProjectileTextures = { tex[16] };
 
-		vector<GLuint> castleOneTowerTextures = { tex[4] };
-		vector<GLuint> castleTwoTowerTextures = { tex[5] };
+		vector<GLuint> castleOneTowerTextures = { tex[10], tex[12], tex[14] };
+		vector<GLuint> castleTwoTowerTextures = { tex[11], tex[13], tex[15] };
 
 		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
 
@@ -179,9 +189,9 @@ int main(void){
 			board->render(shader);
 
 			//particle system set up
-			particleSystem.enable();
-			particleSystem.setAttributes();
-			particleSystem.drawParticles(glm::vec3(0.0),tex[8], 1000);
+			//particleSystem.enable();
+			//particleSystem.setAttributes();
+			//particleSystem.drawParticles(glm::vec3(0.0),tex[8], 1000);
 
 			// Update other events like input handling
 			glfwPollEvents();

@@ -42,6 +42,7 @@ private:
 	std::vector<GLuint> projectileTextures;
 	bool playerControlled;
 	double health,
+		funds = 100,
 		spawnDelay = 5,
 		spawnTimer = 0;
 };

@@ -7,7 +7,9 @@ class Unit :
 {
 public:
 	Unit(int type, 
-		 bool playerControlled, 
+		 double health,
+		 bool playerControlled,
+		 double movementSpeed,
 		 Graph* graph,
 		 glm::vec3 unitScale,
 		 glm::vec2 target, 
