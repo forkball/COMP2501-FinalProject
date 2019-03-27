@@ -41,8 +41,9 @@ void Camera::update(double deltaTime)
 	glm::vec3 cameraTranslatePos(glm::vec3(position.x, position.y, 0.0f));
 	//scaling updates
 	zoom = glm::clamp(zoom, 0.2f, 0.6f);
+
 	//apply transformations
-	glm::mat4 viewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(zoom)) * glm::translate(glm::mat4(1.0f), cameraTranslatePos);
+	viewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(zoom)) * glm::translate(glm::mat4(1.0f), cameraTranslatePos);
 	shader.setUniformMat4("viewMatrix", viewMatrix);
 
 	//zooms camera in and out

@@ -40,6 +40,8 @@ private:
 	std::vector<GLuint> towerTextures;
 	//holds textures of projectiles
 	std::vector<GLuint> projectileTextures;
+	//reference to the particle system
+	ParticleSystem particleSystem;
 	bool playerControlled;
 	double health,
 		funds = 100,

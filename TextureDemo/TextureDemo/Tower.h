@@ -22,13 +22,12 @@ public:
 	void removeProjectile(int index);
 	inline vector<Projectile*> getProjectiles() { return projectiles; }
 private:
-	int type = 0;
+	int type = 0;	
 	bool playerControlled;
-	double health;
 	GLuint projectileTexture;
 	GLuint size;
 	vector<Projectile*> projectiles;
-	double shootingRange = 0.5, 
+	double health, shootingRange = 0.7,
 		  projectileTimer = glfwGetTime(), 
 		  projectileDelay = 2;
 };

@@ -33,7 +33,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.3, 0.0);
 
 // Global texture info
-GLuint tex[19];
+GLuint tex[20];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -97,7 +97,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(19, tex);
+	glGenTextures(20, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "knight1.png");
@@ -114,9 +114,10 @@ void setallTexture(void)
 	setthisTexture(tex[13], "magma2.png");
 	setthisTexture(tex[14], "ice1.png");
 	setthisTexture(tex[15], "ice2.png");
-	setthisTexture(tex[16], "proj1.png");
-	setthisTexture(tex[17], "orb.png");
+	setthisTexture(tex[16], "orb.png");
+	setthisTexture(tex[17], "proj1.png");
 	setthisTexture(tex[18], "flame.png");
+	setthisTexture(tex[19], "freeze.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
@@ -152,16 +153,15 @@ int main(void){
 		vector<GLuint> castleOneUnitTextures = { tex[2], tex[6], tex[8], tex[4] };
 		vector<GLuint> castleTwoUnitTextures = { tex[3], tex[7], tex[9], tex[5] };
 
-		vector<GLuint> castleOneProjectileTextures = { tex[16] };
-		vector<GLuint> castleTwoProjectileTextures = { tex[16] };
+		vector<GLuint> projectileTextures = { tex[17], tex[18], tex[19] };
 
 		vector<GLuint> castleOneTowerTextures = { tex[10], tex[12], tex[14] };
 		vector<GLuint> castleTwoTowerTextures = { tex[11], tex[13], tex[15] };
 
 		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
 
-		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,graph,castleOneProjectileTextures,castleOneUnitTextures,castleOneTowerTextures),
-									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,graph,castleTwoProjectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
+		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,graph,projectileTextures,castleOneUnitTextures,castleOneTowerTextures),
+									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,graph,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
@@ -171,6 +171,8 @@ int main(void){
 		while (!glfwWindowShouldClose(window.getWindow())) { 
 			// Clear background
 			window.clear(viewport_background_color_g);	
+			glDepthMask(GL_TRUE); 
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// Calculate delta time
 			double currentTime = glfwGetTime();
@@ -188,10 +190,12 @@ int main(void){
 			//game entity rendering
 			board->render(shader);
 
-			//particle system set up
-			//particleSystem.enable();
-			//particleSystem.setAttributes();
-			//particleSystem.drawParticles(glm::vec3(0.0),tex[8], 1000);
+			//particle system set up//get ready to draw particles
+			glDepthMask(GL_FALSE);
+			particleSystem.enable();
+			particleSystem.setAttributes();
+			particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
+			particleSystem.drawParticles(glm::vec3(0.0),tex[18], 1000);
 
 			// Update other events like input handling
 			glfwPollEvents();

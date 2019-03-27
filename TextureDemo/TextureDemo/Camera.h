@@ -24,6 +24,8 @@ public:
 	inline void zoomCamera(float zoomAmount) { zoom += zoomAmount; }
 	//returns the mouse position in relation to the window
 	static glm::vec2 getMousePosition();
+	//returns view matrix
+	inline glm::mat4 getViewMatrix() { return viewMatrix; }
 private:
 	//holds the view
 	glm::mat4 viewMatrix;

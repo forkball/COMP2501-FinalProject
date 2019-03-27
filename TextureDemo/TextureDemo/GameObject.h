@@ -9,6 +9,7 @@
 #include <ctime>
 
 #include "Shader.h"
+#include "ParticleSystem.h"
 #include "Window.h"
 #include "Camera.h"
 

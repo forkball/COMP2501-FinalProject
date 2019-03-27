@@ -13,6 +13,7 @@ Castle::Castle(bool playerControlled,
 			   std::vector<GLuint> towerTextures) 
 	: GameObject(entityPosition, entityTexture, entityNumElements), 
 	  graph(graph),
+	  particleSystem(particleSystem),
 	  playerControlled(playerControlled), 
 	  projectileTextures(projectileTextures), 
 	  unitTextures(unitTextures), 
@@ -21,6 +22,7 @@ Castle::Castle(bool playerControlled,
 {
 	scale = spriteScale;
 	spawnTimer = glfwGetTime();
+	srand(time(NULL));
 	if (!playerControlled) {
 		createTower((int)rand() % 3, playerControlled, position + glm::vec3(2.0, 0, 0));
 		createTower((int)rand() % 3, playerControlled, position + glm::vec3(3.5, 0, 0));
@@ -82,7 +84,7 @@ void Castle::createTower(int type, bool playerControlled, glm::vec3 position)
 		                       glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), 
 							   position, 
 							   towerTextures[type], 
-							   projectileTextures[0], 
+							   projectileTextures[type], 
 							   numElem));
 }
 
@@ -105,7 +107,6 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	{
 		if ((glfwGetTime() - spawnTimer) > spawnDelay) 
 		{
-			srand(time(NULL));
 			double heights[] = { -0.32,-0.58,-0.84 };
 			spawnTimer = glfwGetTime();
 			createUnit((int)rand() % 4, playerControlled, glm::vec3(-4.92, heights[(int)rand() % 3], 0));

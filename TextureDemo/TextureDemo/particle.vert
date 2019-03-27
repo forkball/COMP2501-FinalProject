@@ -10,10 +10,10 @@ out vec2 uv_interp;
 // Uniform (global) buffer
 uniform mat4 x;
 uniform float time;
+uniform mat4 viewMatrix;
 
 // Attributes forwarded to the fragment shader
 out vec4 color_interp;
-
 
 void main()
 {
@@ -21,9 +21,9 @@ void main()
 	float acttime;
 	float speed = 9.0;
 	acttime = mod(time + t*10.0, 2.0);
-//	acttime = mod(time,4);
     ppos = vec4(vertex.x+dir.x*acttime*speed , vertex.y+dir.y*acttime*speed, 0.0, 1.0);
-    gl_Position = x*ppos;
+	vec4 vertexPos = vec4(vertex, 0.0, 1.0);
+    gl_Position = viewMatrix * x * ppos;
 	
     color_interp = vec4(uv,0.5, 1.0);
 	uv_interp = uv;

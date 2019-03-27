@@ -19,11 +19,13 @@ public:
 	~Unit();
 	void update(double deltaTime);
 	inline void takeDamage(double dmg) { health -= dmg; }
+	inline void freeze() { freezeSlow = true; }
 	inline double getHealth() { return health; }
 private:
 	int type = 0;
-	bool playerControlled;
-	double health, movementSpeed = 0.2;
+	bool playerControlled, freezeSlow;
+	double health, orgSpeed, movementSpeed, freezeTimer = 0, freezeDelay = 3;
+
 	Graph* graph;
 	std::vector<glm::vec2> path;
 };

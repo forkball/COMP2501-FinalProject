@@ -24,13 +24,28 @@ void Tower::update(double deltaTime, vector<Unit*> enemies)
 		for (int i = 0; i < enemies.size(); i++) {
 			if (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange) {
 				if ((glfwGetTime() - projectileTimer) > projectileDelay) {
-					shoot(enemies.at(i)->getPosition(),50);
+					shoot(enemies.at(i)->getPosition(), 50);
 					projectileTimer = glfwGetTime();
 				}
 			}
 		}
 		break;
 	case 1:
+		for (int i = 0; i < enemies.size(); i++) {
+			if (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange) {
+				//particleSystem.drawParticles(position, projectileTexture, 1000);
+			}
+		}
+		break;
+	case 2:
+		for (int i = 0; i < enemies.size(); i++) {
+			if (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange) {
+				if ((glfwGetTime() - projectileTimer) > projectileDelay) {
+					shoot(enemies.at(i)->getPosition(), 25);
+					projectileTimer = glfwGetTime();
+				}
+			}
+		}
 		break;
 	}
 	#pragma endregion
@@ -55,6 +70,11 @@ void Tower::update(double deltaTime, vector<Unit*> enemies)
 				if (dist < 0.1)
 				{
 					enem->takeDamage(proj->getDamage());
+					switch (type) {
+						case 2:
+							enemies.at(i)->freeze();
+							break;
+					}
 					removeProjectile(i);
 					break;
 				}
@@ -94,5 +114,5 @@ void Tower::shoot(glm::vec3 target,int damage)
 	double dist = sqrt((horDiff * horDiff) + (verDiff * verDiff));
 	double unitVectorX = horDiff / dist;
 	double unitVectorY = verDiff / dist;
-	projectiles.push_back(new Projectile(position + glm::vec3(0,0.2,0), projectileTexture, size, glm::vec2(unitVectorX,unitVectorY), 2, damage));
+	projectiles.push_back(new Projectile(type, position + glm::vec3(0,0.2,0), projectileTexture, size, glm::vec2(unitVectorX,unitVectorY), 2, damage));
 }
