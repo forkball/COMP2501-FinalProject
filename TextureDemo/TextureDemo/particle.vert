@@ -14,6 +14,7 @@ uniform mat4 viewMatrix;
 
 // Attributes forwarded to the fragment shader
 out vec4 color_interp;
+out float curr_time;
 
 void main()
 {
@@ -24,7 +25,7 @@ void main()
     ppos = vec4(vertex.x+dir.x*acttime*speed , vertex.y+dir.y*acttime*speed, 0.0, 1.0);
 	vec4 vertexPos = vec4(vertex, 0.0, 1.0);
     gl_Position = viewMatrix * x * ppos;
-	
-    color_interp = vec4(uv,0.5, 1.0);
+
 	uv_interp = uv;
+	curr_time = time + t;
 }

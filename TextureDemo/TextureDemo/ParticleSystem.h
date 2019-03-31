@@ -14,6 +14,6 @@ public:
 	void setAttributes ();
 
 	//draws particles
-	void drawParticles(glm::vec3 position, GLuint texture, int particlesize);
+	void drawParticles(glm::vec3 position, float rotation, GLuint texture, int particlesize);
 };
 

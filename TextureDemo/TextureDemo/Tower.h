@@ -17,13 +17,14 @@ public:
 		  GLint entityNumElements);
 	~Tower();
 	void update(double deltaTime, vector<Unit*> enemies);
-	void render(Shader &shader);
+	void render(Shader &shader, ParticleSystem &ps);
 	void shoot(glm::vec3 target, int damage);
 	void removeProjectile(int index);
 	inline vector<Projectile*> getProjectiles() { return projectiles; }
 private:
 	int type = 0;	
-	bool playerControlled;
+	bool playerControlled, flame = false;
+	glm::vec3 targetPosition;
 	GLuint projectileTexture;
 	GLuint size;
 	vector<Projectile*> projectiles;

@@ -57,7 +57,7 @@ void ParticleSystem::createParticleArray(void)
 	{
 		if (i % 4 == 0)
 		{
-			theta = (0.28*(rand() % 1000) / 1000.0f);//(2*(rand() % 10000) / 10000.0f -1.0f)*0.13f;
+			theta = (0.28*(rand() % 1000) / 1000.0f);
 			r = 1.0f + 0.8*(rand() % 10000) / 10000.0f;
 			tmod = (rand() % 10000) / 10000.0f;
 		}
@@ -75,11 +75,6 @@ void ParticleSystem::createParticleArray(void)
 		// texture coordinate
 		particleatt[i*vertex_attr + 5] = vertex[(i % 4) * 7 + 5];
 		particleatt[i*vertex_attr + 6] = vertex[(i % 4) * 7 + 6];
-		//glBlendFunc(GL_ONE, GL_ONE);
-		
-	
-	
-	
 	}
 
 	GLuint face[] = {
@@ -108,8 +103,9 @@ void ParticleSystem::createParticleArray(void)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(manyface), manyface, GL_STATIC_DRAW);
 }
 
-void ParticleSystem::drawParticles(glm::vec3 position, GLuint texture, int particlesize)
+void ParticleSystem::drawParticles(glm::vec3 position, float rotation, GLuint texture, int particlesize)
 {
+	glDepthMask(GL_FALSE);
 	// Select proper shader program to use
 	glUseProgram(getShaderID());
 
@@ -118,25 +114,19 @@ void ParticleSystem::drawParticles(glm::vec3 position, GLuint texture, int parti
 	int timeLocation = glGetUniformLocation(getShaderID(), "time");
 
 	glm::mat4 rot = glm::mat4();
-	
-	float k = glfwGetTime();
 	rot = glm::translate(rot, position);
-	rot = glm::scale(rot, glm::vec3(0.1, 0.1, 0.1));
-	rot = glm::translate(rot, glm::vec3(20, 0, 1));
-	//glBlendFunc(GL_ONE, GL_ZERO);
-	//glBlendFunc(GL_ZERO, GL_ONE);
+	rot = glm::rotate(rot, rotation, glm::vec3(0, 0, 1));
+	rot = glm::scale(rot, glm::vec3(0.1));
 
 	// get ready to draw, load matrix
 	glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &rot[0][0]);
-	glUniform1f(timeLocation, k);
+	float time = glfwGetTime();
+	glUniform1f(timeLocation, time);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// Draw 
-
 	glBlendFunc(GL_ONE, GL_ONE);
-	glColorMask(true, false, true, true);
 	glDrawElements(GL_TRIANGLES, 6 * particlesize, GL_UNSIGNED_INT, 0);
-	glColorMask(true, true, true, true);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	glDepthMask(GL_TRUE);
 }

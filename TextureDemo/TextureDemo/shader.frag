@@ -17,5 +17,4 @@ void main()
 	{
 		discard;
 	}
-//	 FragColor = color_interp;
 }

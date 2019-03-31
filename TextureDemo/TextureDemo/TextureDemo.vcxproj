@@ -182,6 +182,7 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="particle.frag" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
   </ItemGroup>

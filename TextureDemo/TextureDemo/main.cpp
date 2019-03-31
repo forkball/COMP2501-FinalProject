@@ -146,7 +146,7 @@ int main(void){
 		// Set up shaders
 		Shader shader("shader.vert", "shader.frag");
 
-		ParticleSystem particleSystem("particle.vert", "shader.frag");
+		ParticleSystem particleSystem("particle.vert", "particle.frag");
 
 		particleSystem.createParticleArray();
 
@@ -162,13 +162,13 @@ int main(void){
 
 		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
 
-		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,graph,projectileTextures,castleOneUnitTextures,castleOneTowerTextures),
-									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,graph,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
+		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,projectileTextures,castleOneUnitTextures,castleOneTowerTextures),
+									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
 		Camera* camera = new Camera(shader,window,glm::vec2(window_width_g,window_height_g));
-		Board* board = new Board(camera,castles);
+		Board* board = new Board(camera, &particleSystem, graph, castles);
 
 		while (!glfwWindowShouldClose(window.getWindow())) { 
 			// Clear background
@@ -190,19 +190,12 @@ int main(void){
 			//game entity updating
 			board->update(deltaTime);
 			//game entity rendering
-			board->render(shader);
+			board->render(shader, particleSystem);
 
 			//particle system set up//get ready to draw particles
-			
-			//glBlendFunc(GL_ONE, GL_ONE);
 			particleSystem.enable();
 			particleSystem.setAttributes();
-			particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
-			glDepthMask(GL_FALSE);
-			particleSystem.drawParticles(glm::vec3(2.0, 0.0, 0.0), tex[18], 1000);
-			particleSystem.drawParticles(glm::vec3(0.0), tex[18], 1000);
-			glDepthMask(GL_TRUE);			
-			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());	
 
 			// Update other events like input handling
 			glfwPollEvents();

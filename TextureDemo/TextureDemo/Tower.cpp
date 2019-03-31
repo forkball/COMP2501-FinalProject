@@ -1,7 +1,4 @@
 #include "Tower.h"
-#include "ParticleSystem.h"
-
-//extern ParticleSystem particleSystem;
 
 Tower::Tower(int type, bool playerControlled, glm::vec3 towerScale, glm::vec3 &entityPosition, GLuint entityTexture, GLuint projectileTexture, GLint entityNumElements)
 	: GameObject(entityPosition, entityTexture, entityNumElements), type(type), playerControlled(playerControlled), projectileTexture(projectileTexture), size(entityNumElements)
@@ -35,13 +32,10 @@ void Tower::update(double deltaTime, vector<Unit*> enemies)
 		break;
 	case 1:
 		for (int i = 0; i < enemies.size(); i++) {
-			if (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange) {
-				//particleSystem.drawParticles(position, projectileTexture, 1000);
-
-				//particleSystem.drawParticles(glm::vec3(-2.0, 0.0, 0.0), tex[18], 1000);
-
-
-
+			flame = (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange);
+			if (flame) {
+				targetPosition = enemies.at(i)->getPosition();
+				break;
 			}
 		}
 		break;
@@ -89,13 +83,13 @@ void Tower::update(double deltaTime, vector<Unit*> enemies)
 			}
 		}
 	}
-
+	
 
 	#pragma endregion
 }
 
 //renders tower and projectiles
-void Tower::render(Shader& shader)
+void Tower::render(Shader& shader, ParticleSystem &ps)
 {
 	for (int i = 0; i < projectiles.size(); i++)
 	{
@@ -103,6 +97,16 @@ void Tower::render(Shader& shader)
 	}
 
 	GameObject::render(shader);
+
+	if (flame) {
+		glm::vec3 direction = glm::normalize(targetPosition - getPosition());
+		float orientation = (atan2(direction.y, direction.x)) * (180 / glm::pi<float>());
+		ps.enable();
+		ps.setAttributes();
+		ps.drawParticles(position, orientation - 80, projectileTexture, 1000);
+	}
+	shader.enable();
+	shader.setAttributes();
 }
 
 //removes projectile from vector

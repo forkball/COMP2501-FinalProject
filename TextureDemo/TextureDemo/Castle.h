@@ -13,7 +13,6 @@ public:
 		   glm::vec3 spriteScale,
 		   GLuint entityTexture,
 		   GLint entityNumElements,
-		   Graph* graph,
 		   std::vector<GLuint> projectileTextures,
 		   std::vector<GLuint> unitTextures,
 		   std::vector<GLuint> towerTextures);
@@ -22,13 +21,17 @@ public:
 	void render(Shader &shader);
 	//updates entities
 	void update(double deltaTime,glm::vec2 mousePosition, Castle* otherCastles);
-	void createUnit(int type, bool playerControlled, glm::vec3 position);
-	void createTower(int type, bool playerControlled, glm::vec3 position);
+	//getters
+	inline std::vector<Tower*> getTowers() { return towers; }
 	inline std::vector<Unit*> getUnits() { return units; }
-	inline std::vector<Tower*> getTower() { return towers; }
+	inline std::vector<GLuint> getUnitTextures() { return unitTextures; }
+	inline std::vector<GLuint> getTowerTextures() { return towerTextures; }
+	inline std::vector<GLuint> getProjectileTextures() { return projectileTextures; }
+	inline GLint getNumElem() { return numElem; }
+	//add to vectos
+	inline void addUnit(Unit* u) { units.push_back(u); }
+	inline void addTower(Tower* t) { towers.push_back(t); }
 private:
-	//holds pathplanning graph
-	Graph* graph;
 	GLint numElem;
 	//holds all units
 	std::vector<Unit*> units;
@@ -44,8 +47,6 @@ private:
 	ParticleSystem particleSystem;
 	bool playerControlled;
 	double health,
-		funds = 100,
-		spawnDelay = 5,
-		spawnTimer = 0;
+		   funds = 100;
 };
 
