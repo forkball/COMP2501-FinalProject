@@ -22,6 +22,7 @@
 #include "Projectile.h"
 #include "ParticleSystem.h"
 
+//static ParticleSystem particleSystem;
 // Macro for printing exceptions
 #define PrintException(exception_object)\
 	std::cerr << exception_object.what() << std::endl
@@ -146,6 +147,7 @@ int main(void){
 		Shader shader("shader.vert", "shader.frag");
 
 		ParticleSystem particleSystem("particle.vert", "shader.frag");
+
 		particleSystem.createParticleArray();
 
 		// Set up the textures
@@ -191,11 +193,16 @@ int main(void){
 			board->render(shader);
 
 			//particle system set up//get ready to draw particles
-			glDepthMask(GL_FALSE);
+			
+			//glBlendFunc(GL_ONE, GL_ONE);
 			particleSystem.enable();
 			particleSystem.setAttributes();
 			particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
-			particleSystem.drawParticles(glm::vec3(0.0),tex[18], 1000);
+			glDepthMask(GL_FALSE);
+			particleSystem.drawParticles(glm::vec3(2.0, 0.0, 0.0), tex[18], 1000);
+			particleSystem.drawParticles(glm::vec3(0.0), tex[18], 1000);
+			glDepthMask(GL_TRUE);			
+			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 			// Update other events like input handling
 			glfwPollEvents();

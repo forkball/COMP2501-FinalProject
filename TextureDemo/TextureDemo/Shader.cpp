@@ -9,7 +9,10 @@ Shader::Shader(const char *vertPath, const char *fragPath) {
 
 
 	// Create a shader from vertex program source code
-	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+	
+		GLuint vs = glCreateShader(GL_VERTEX_SHADER); 
+
+	//catch(int){	};
 	glShaderSource(vs, 1, &source_vp, NULL);
 	glCompileShader(vs);
 

@@ -1,4 +1,7 @@
 #include "Tower.h"
+#include "ParticleSystem.h"
+
+//extern ParticleSystem particleSystem;
 
 Tower::Tower(int type, bool playerControlled, glm::vec3 towerScale, glm::vec3 &entityPosition, GLuint entityTexture, GLuint projectileTexture, GLint entityNumElements)
 	: GameObject(entityPosition, entityTexture, entityNumElements), type(type), playerControlled(playerControlled), projectileTexture(projectileTexture), size(entityNumElements)
@@ -34,6 +37,11 @@ void Tower::update(double deltaTime, vector<Unit*> enemies)
 		for (int i = 0; i < enemies.size(); i++) {
 			if (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange) {
 				//particleSystem.drawParticles(position, projectileTexture, 1000);
+
+				//particleSystem.drawParticles(glm::vec3(-2.0, 0.0, 0.0), tex[18], 1000);
+
+
+
 			}
 		}
 		break;

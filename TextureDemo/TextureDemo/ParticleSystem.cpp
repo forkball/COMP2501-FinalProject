@@ -75,8 +75,11 @@ void ParticleSystem::createParticleArray(void)
 		// texture coordinate
 		particleatt[i*vertex_attr + 5] = vertex[(i % 4) * 7 + 5];
 		particleatt[i*vertex_attr + 6] = vertex[(i % 4) * 7 + 6];
-
-
+		//glBlendFunc(GL_ONE, GL_ONE);
+		
+	
+	
+	
 	}
 
 	GLuint face[] = {
@@ -115,10 +118,13 @@ void ParticleSystem::drawParticles(glm::vec3 position, GLuint texture, int parti
 	int timeLocation = glGetUniformLocation(getShaderID(), "time");
 
 	glm::mat4 rot = glm::mat4();
-
+	
 	float k = glfwGetTime();
 	rot = glm::translate(rot, position);
 	rot = glm::scale(rot, glm::vec3(0.1, 0.1, 0.1));
+	rot = glm::translate(rot, glm::vec3(20, 0, 1));
+	//glBlendFunc(GL_ONE, GL_ZERO);
+	//glBlendFunc(GL_ZERO, GL_ONE);
 
 	// get ready to draw, load matrix
 	glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &rot[0][0]);
@@ -126,5 +132,11 @@ void ParticleSystem::drawParticles(glm::vec3 position, GLuint texture, int parti
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// Draw 
+
+	glBlendFunc(GL_ONE, GL_ONE);
+	glColorMask(true, false, true, true);
 	glDrawElements(GL_TRIANGLES, 6 * particlesize, GL_UNSIGNED_INT, 0);
+	glColorMask(true, true, true, true);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 }
