@@ -1,5 +1,6 @@
 // COMP 2501 Final Project
 // Eros Di Pede (101035030)
+// Martin Nikolovski (101042483)
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -170,39 +171,58 @@ int main(void){
 		Camera* camera = new Camera(shader,window,glm::vec2(window_width_g,window_height_g));
 		Board* board = new Board(camera, &particleSystem, graph, castles);
 
-		while (!glfwWindowShouldClose(window.getWindow())) { 
-			// Clear background
-			window.clear(viewport_background_color_g);	
-			glDepthMask(GL_TRUE); 
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		static bool playtoggle = false;
 
-			// Calculate delta time
-			double currentTime = glfwGetTime();
-			double deltaTime = currentTime - lastTime;
-			lastTime = currentTime; 
+		while (!glfwWindowShouldClose(window.getWindow())) {
 
-			// Select proper shader program to use
-			shader.enable();
-			shader.setAttributes();
+			// press P to change pause toggle
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_P) == GLFW_PRESS) {
 
-			// Setup camera to focus on the player object (the first object in the gameObjects array)
-			camera->update(deltaTime);
-			//game entity updating
-			board->update(deltaTime);
-			//game entity rendering
-			board->render(shader, particleSystem);
+					if (playtoggle == true) {
 
-			//particle system set up//get ready to draw particles
-			particleSystem.enable();
-			particleSystem.setAttributes();
-			particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());	
+					playtoggle = false;
 
-			// Update other events like input handling
-			glfwPollEvents();
+					}
+					else { playtoggle = true; }
+			}	
 
-			// Push buffer drawn in the background onto the display
-			glfwSwapBuffers(window.getWindow());
-		}
+				// Clear background
+				window.clear(viewport_background_color_g);
+				glDepthMask(GL_TRUE);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				// Calculate delta time
+				double currentTime = glfwGetTime();
+				double deltaTime = currentTime - lastTime;
+				lastTime = currentTime;
+
+				// Select proper shader program to use
+				shader.enable();
+				shader.setAttributes();
+
+				// check pause toggle
+				if (playtoggle) {} else {
+					// Setup camera to focus on the player object (the first object in the gameObjects array)
+					camera->update(deltaTime);
+					//game entity updating
+					board->update(deltaTime);
+				}
+					//game entity rendering
+					board->render(shader, particleSystem);
+				
+
+				//particle system set up//get ready to draw particles
+				particleSystem.enable();
+				particleSystem.setAttributes();
+				particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
+
+				// Update other events like input handling
+				glfwPollEvents();
+
+				// Push buffer drawn in the background onto the display
+				glfwSwapBuffers(window.getWindow());
+			}
+		
 	}
 	catch (std::exception &e){
 		// print exception and sleep so error can be read
