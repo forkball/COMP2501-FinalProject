@@ -55,7 +55,7 @@ void Board::render(Shader &shader, ParticleSystem &ps)
 		//renders units
 		for (int j = 0; j < castles.at(i)->getUnits().size(); j++)
 		{
-			castles.at(i)->getUnits().at(j)->render(shader);
+			castles.at(i)->getUnits().at(j)->render(shader,ps);
 		}
 	}
 }

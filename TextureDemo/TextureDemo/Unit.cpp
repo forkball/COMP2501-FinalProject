@@ -29,6 +29,7 @@ void Unit::update(double deltaTime)
 			freezeSlow = false;
 		movementSpeed = orgSpeed / 2;
 	}
+
 	else movementSpeed = orgSpeed;
 
 	//movement control
@@ -57,4 +58,20 @@ void Unit::update(double deltaTime)
 	case 3:
 		break;
 	}
+}
+
+//renders unit and potential particles
+extern GLuint tex[];
+
+void Unit::render(Shader& shader, ParticleSystem &ps)
+{
+	GameObject::render(shader);
+
+	if (freezeSlow) {
+		ps.enable();
+		ps.setAttributes();
+		ps.drawParticles(position, 180, tex[20], 10);
+	}
+	shader.enable();
+	shader.setAttributes();
 }

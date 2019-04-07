@@ -18,10 +18,13 @@ public:
 		 GLint entityNumElements);
 	~Unit();
 	void update(double deltaTime);
+	void render(Shader& shader, ParticleSystem &ps);
 	inline void takeDamage(double dmg) { health -= dmg; }
 	inline void freeze() { freezeSlow = true; }
 	inline double getHealth() { return health; }
 private:
+	GLuint freezeTexture;
+	GLuint size;
 	int type = 0;
 	bool playerControlled, freezeSlow;
 	double health, orgSpeed, movementSpeed, freezeTimer = 0, freezeDelay = 3;

@@ -35,7 +35,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.3, 0.0);
 
 // Global texture info
-GLuint tex[20];
+GLuint tex[21];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -99,7 +99,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(20, tex);
+	glGenTextures(21, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "knight1.png");
@@ -120,6 +120,7 @@ void setallTexture(void)
 	setthisTexture(tex[17], "proj1.png");
 	setthisTexture(tex[18], "flame.png");
 	setthisTexture(tex[19], "freeze.png");
+	setthisTexture(tex[20], "freezeparticle.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
@@ -157,7 +158,7 @@ int main(void){
 		vector<GLuint> castleTwoUnitTextures = { tex[3], tex[7], tex[9], tex[5] };
 
 		vector<GLuint> projectileTextures = { tex[17], tex[18], tex[19] };
-
+		
 		vector<GLuint> castleOneTowerTextures = { tex[10], tex[12], tex[14] };
 		vector<GLuint> castleTwoTowerTextures = { tex[11], tex[13], tex[15] };
 
