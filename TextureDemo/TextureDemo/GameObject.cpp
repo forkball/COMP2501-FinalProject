@@ -4,6 +4,7 @@
 	GameObject is responsible for handling the rendering and updating of objects in the game world
 	The update method is virtual, so you can inherit from GameObject and override the update functionality (see PlayerGameObject for reference)
 */
+static int id = 0;
 
 GameObject::GameObject(glm::vec3 &entityPosition, GLuint entityTexture, GLint entityNumElements)
 {
@@ -11,6 +12,8 @@ GameObject::GameObject(glm::vec3 &entityPosition, GLuint entityTexture, GLint en
 	position = entityPosition;
 	texture = entityTexture;
 	numElements = entityNumElements;
+	pid = id++;
+
 }
 
 // Updates the GameObject's state. Can be overriden for children

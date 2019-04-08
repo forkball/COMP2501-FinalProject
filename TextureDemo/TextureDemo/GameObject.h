@@ -13,8 +13,10 @@
 #include "Window.h"
 #include "Camera.h"
 
+
 class GameObject {
 public:
+
 	GameObject(glm::vec3 &entityPosition, GLuint entityTexture, GLint entityNumElements);
 
 	// Updates the GameObject's state. Can be overriden for children
@@ -24,11 +26,14 @@ public:
 	void render(Shader &shader);
 
 	// Getters
+	int getId() { return pid; }
 	inline glm::vec3& getPosition() { return position; }
 	inline float getOrientation() { return orientation; }
 	// Setters
 	inline void setPosition(glm::vec3& newPosition) { position = newPosition; }
 protected:
+
+	int pid;
 	// Object's Transform Variables
 	glm::vec3 position;
 	glm::vec3 scale = glm::vec3(0.1f);
