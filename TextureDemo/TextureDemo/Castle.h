@@ -21,6 +21,9 @@ public:
 	void render(Shader &shader);
 	//updates entities
 	void update(double deltaTime,glm::vec2 mousePosition, Castle* otherCastles);
+	//spend funds, return if funds were spent or not
+	bool spendFunds(double funds);
+	inline void addFunds(double funds) { this->funds += funds; }
 	//getters
 	inline std::vector<Tower*> getTowers() { return towers; }
 	inline std::vector<Unit*> getUnits() { return units; }
@@ -28,7 +31,7 @@ public:
 	inline std::vector<GLuint> getTowerTextures() { return towerTextures; }
 	inline std::vector<GLuint> getProjectileTextures() { return projectileTextures; }
 	inline GLint getNumElem() { return numElem; }
-	//add to vectos
+	//add to vectors
 	inline void addUnit(Unit* u) { units.push_back(u); }
 	inline void addTower(Tower* t) { towers.push_back(t); }
 private:

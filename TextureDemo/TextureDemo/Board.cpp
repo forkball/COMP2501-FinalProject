@@ -3,14 +3,15 @@
 Board::Board(Camera* camera, ParticleSystem* particleSystem, Graph* graph, vector<Castle*> castles)
 	: camera(camera), particleSystem(particleSystem), graph(graph) ,castles(castles)
 {
-	spawnTimer = glfwGetTime();
+	spawnTimer = glfwGetTime() - spawnDelay;
 	srand(time(NULL));
 	createTower(0,(int)rand() % 3, 0, glm::vec3(-4.0, 0.5, 0));
 	createTower(0,(int)rand() % 3, 0, glm::vec3(-2.5, 0.5, 0));
 	createTower(1,(int)rand() % 3, 1, glm::vec3(4.0, 0.5, 0));
-	createTower(1,1, 1, glm::vec3(2.5, 0.5, 0));
-	
+	createTower(1,(int)rand() % 3, 1, glm::vec3(2.5, 0.5, 0));
 }
+
+const double Board::heights[] = {-0.32, -0.58, -0.84 };
 
 Board::~Board()
 {
@@ -26,18 +27,47 @@ void Board::update(double deltaTime)
 {
 	glm::vec2 mousePosition = camera->getMousePosition();
 	glm::vec2 cameraPosition = glm::vec2(camera->getPosition().x, camera->getPosition().y);
+	
 	//calls castle updates
 	for (int i = 0; i < castles.size(); i++)
 	{
-		castles.at(i)->update(deltaTime, (mousePosition - cameraPosition), castles.at((i) ? 0 : 1));
+		castles.at(i)->update(deltaTime, (2.0f * mousePosition - cameraPosition), castles.at((i) ? 0 : 1));
 	}
 
 	if ((glfwGetTime() - spawnTimer) > spawnDelay)
 	{
-		double heights[] = { -0.32,-0.58,-0.84 };
 		spawnTimer = glfwGetTime();
 		createUnit(0,(int)rand() % 4, 0, glm::vec3(-4.92, heights[(int)rand() % 3], 0));
 	}
+
+	#pragma region Key Control
+	if (((glfwGetTime() - createTimer)) > createDelay) {
+		if (glfwGetKey(Window::getWindow(), GLFW_KEY_1) == GLFW_PRESS) {
+			if (castles.at(1)->spendFunds(u1Cost)) {
+				createUnit(1, 0, 1, glm::vec3(4.92, heights[(int)rand() % 3], 0));
+				createTimer = glfwGetTime();
+			}
+		}
+		else if (glfwGetKey(Window::getWindow(), GLFW_KEY_2) == GLFW_PRESS) {
+			if (castles.at(1)->spendFunds(u2Cost)) {
+				createUnit(1, 1, 1, glm::vec3(4.92, heights[(int)rand() % 3], 0));
+				createTimer = glfwGetTime();
+			}
+		}
+		else if (glfwGetKey(Window::getWindow(), GLFW_KEY_3) == GLFW_PRESS) {
+			if (castles.at(1)->spendFunds(u3Cost)) {
+				createUnit(1, 2, 1, glm::vec3(4.92, heights[(int)rand() % 3], 0));
+				createTimer = glfwGetTime();
+			}
+		}
+		else if (glfwGetKey(Window::getWindow(), GLFW_KEY_4) == GLFW_PRESS) {
+			if (castles.at(1)->spendFunds(u4Cost)) {
+				createUnit(1, 3, 1, glm::vec3(4.92, heights[(int)rand() % 3], 0));
+				createTimer = glfwGetTime();
+			}
+		}
+	}
+	#pragma endregion
 }
 
 //renders all board entities 
@@ -81,7 +111,8 @@ void Board::createUnit(int castleNumber, int type, bool playerControlled, glm::v
 		break;
 	}
 
-	castle->addUnit(new Unit(type,
+	castle->addUnit(new Unit(castle,
+							 type,
 		 			    	 health,
 							 playerControlled,
 							 movementSpeed,
@@ -97,7 +128,8 @@ void Board::createUnit(int castleNumber, int type, bool playerControlled, glm::v
 void Board::createTower(int castleNumber, int type, bool playerControlled, glm::vec3 position)
 {
 	Castle* castle = castles.at(castleNumber);
-	castle->addTower(new Tower(type,
+	castle->addTower(new Tower(castle,
+		type,
 		playerControlled,
 		glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1),
 		position,

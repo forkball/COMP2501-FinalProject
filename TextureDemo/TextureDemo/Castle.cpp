@@ -41,26 +41,39 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	//player controls
 	if (playerControlled)
 	{
-
-		static int oldState = GLFW_RELEASE;
-		int newState = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
-		if (newState == GLFW_RELEASE && oldState == GLFW_PRESS) {
+		std::cout << funds << std::endl;
+		#pragma region Mouse Control
+		static int oldMouseState = GLFW_RELEASE;
+		int newMouseState = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
+		if (newMouseState == GLFW_RELEASE && oldMouseState == GLFW_PRESS) {
 			std::cout << mousePosition.x << std::endl;
 			std::cout << position.x << std::endl;
+
+			for (int i = 0; i < towers.size(); i++) {
+
+				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2) {
+				
+					// only works for player controlled towers due to above condition
+					std::cout << towers[i]->getId() << " yes " << mousePosition.x;
+				}
+			
+			}
+
 		}
-		oldState = newState;
+		oldMouseState = newMouseState;
+		#pragma endregion
 	}
 
 	//update towers
 	for (int i = 0; i < towers.size(); i++)
 	{
-		towers.at(i)->update(deltaTime,otherCastles->getUnits());
+		towers.at(i)->update(deltaTime, otherCastles->getUnits());
 	}
 
 	for (int i = 0; i < units.size(); i++)
 	{
 		Unit* unit = units.at(i);
-		unit->update(deltaTime);
+		unit->update(deltaTime, otherCastles->getUnits());
 		if (unit->getHealth() <= 0)
 		{
 			unit = NULL;
@@ -74,4 +87,15 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 void Castle::render(Shader& shader)
 {
 	GameObject::render(shader);
+}
+
+//if possible, decrements available funds
+bool Castle::spendFunds(double funds)
+{
+	if (this->funds - funds >= 0)
+	{
+		this->funds -= funds;
+		return true;
+	}
+	return false;
 }

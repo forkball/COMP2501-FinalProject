@@ -2,7 +2,6 @@
 #include "Castle.h"
 #include "Unit.h"
 #include "Tower.h"
-#include "Shader.h"
 #include "Camera.h"
 #include "Graph.h"
 #include "ParticleSystem.h"
@@ -23,12 +22,20 @@ public:
 	//creating entities
 	void createUnit(int castleNumber, int type, bool playerControlled, glm::vec3 position);
 	void createTower(int castleNumber, int type, bool playerControlled, glm::vec3 position);
+
 private:
 	ParticleSystem* particleSystem;
 	Graph* graph;
 	Camera* camera;
 	vector<Castle*> castles;
-	float spawnDelay = 5,
-		  spawnTimer = 0;
+	const static double heights[];
+	float spawnDelay = 20,
+		  spawnTimer = 0,
+	      u1Cost = 25,
+		  u2Cost = 25,
+		  u3Cost = 25,
+		  u4Cost = 25,
+		  createTimer = 0,
+		  createDelay = 1;
 };
 

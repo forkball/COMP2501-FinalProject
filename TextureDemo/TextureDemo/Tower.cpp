@@ -1,7 +1,8 @@
 #include "Tower.h"
+#include "Castle.h"
 
-Tower::Tower(int type, bool playerControlled, glm::vec3 towerScale, glm::vec3 &entityPosition, GLuint entityTexture, GLuint projectileTexture, GLint entityNumElements)
-	: GameObject(entityPosition, entityTexture, entityNumElements), type(type), playerControlled(playerControlled), projectileTexture(projectileTexture), size(entityNumElements)
+Tower::Tower(GameObject* parent, int type, bool playerControlled, glm::vec3 towerScale, glm::vec3 &entityPosition, GLuint entityTexture, GLuint projectileTexture, GLint entityNumElements)
+	: GameObject(entityPosition, entityTexture, entityNumElements), parent(parent), type(type), playerControlled(playerControlled), projectileTexture(projectileTexture), size(entityNumElements)
 {
 	scale = towerScale;
 }
@@ -15,7 +16,7 @@ Tower::~Tower()
 }
 
 //update tower logic
-void Tower::update(double deltaTime, vector<Unit*> enemies)
+void Tower::update(double deltaTime, std::vector<Unit*> enemies)
 {
 	#pragma region Tower Behaviors
 	switch (type)
@@ -69,8 +70,11 @@ void Tower::update(double deltaTime, vector<Unit*> enemies)
 			{
 				Unit* enem = enemies.at(i);
 				double dist = sqrt(pow(enem->getPosition().x - proj->getPosition().x, 2) + pow(enem->getPosition().y - proj->getPosition().y, 2));
-				if (dist < 0.1)
+				if (dist <= 0.2)
 				{
+					//to-do different prices per unit
+					if (enem->getHealth() - proj->getDamage() <= 0)
+						((Castle*)parent)->addFunds(25);
 					enem->takeDamage(proj->getDamage());
 					switch (type) {
 						case 2:
@@ -83,8 +87,6 @@ void Tower::update(double deltaTime, vector<Unit*> enemies)
 			}
 		}
 	}
-	
-
 	#pragma endregion
 }
 
@@ -96,17 +98,19 @@ void Tower::render(Shader& shader, ParticleSystem &ps)
 		projectiles.at(i)->render(shader);
 	}
 
-	GameObject::render(shader);
-
 	if (flame) {
 		glm::vec3 direction = glm::normalize(targetPosition - getPosition());
 		float orientation = (atan2(direction.y, direction.x)) * (180 / glm::pi<float>());
+		
 		ps.enable();
 		ps.setAttributes();
 		ps.drawParticles(position, orientation - 80, projectileTexture, 1000);
 	}
+
 	shader.enable();
 	shader.setAttributes();
+
+	GameObject::render(shader);
 }
 
 //removes projectile from vector
@@ -121,7 +125,7 @@ void Tower::removeProjectile(int index)
 //shoots projectiles at target
 void Tower::shoot(glm::vec3 target,int damage)
 {
-	double horDiff = target.x - position.x;
+	double horDiff = (target.x - position.x);
 	double verDiff = target.y - (position.y + 0.2);
 	double dist = sqrt((horDiff * horDiff) + (verDiff * verDiff));
 	double unitVectorX = horDiff / dist;

@@ -2,13 +2,14 @@
 #include "GameObject.h"
 #include "Unit.h"
 #include "Projectile.h"
+#include <vector>
 
-using namespace std;
 class Tower :
 	public GameObject
 {
 public:
-	Tower(int type, 
+	Tower(GameObject* parent,
+		  int type, 
 		  bool playerControlled, 
 		  glm::vec3 towerScale, 
 		  glm::vec3 &entityPosition, 
@@ -16,19 +17,20 @@ public:
 		  GLuint projectileTexture,
 		  GLint entityNumElements);
 	~Tower();
-	void update(double deltaTime, vector<Unit*> enemies);
+	void update(double deltaTime, std::vector<Unit*> enemies);
 	void render(Shader &shader, ParticleSystem &ps);
 	void shoot(glm::vec3 target, int damage);
 	void removeProjectile(int index);
-	inline vector<Projectile*> getProjectiles() { return projectiles; }
+	inline std::vector<Projectile*> getProjectiles() { return projectiles; }
 private:
+	GameObject* parent;
 	int type = 0;	
 	bool playerControlled, flame = false;
 	glm::vec3 targetPosition;
 	GLuint projectileTexture;
 	GLuint size;
-	vector<Projectile*> projectiles;
-	double health, shootingRange = 0.7,
+	std::vector<Projectile*> projectiles;
+	double health, shootingRange = 1,
 		  projectileTimer = glfwGetTime(), 
 		  projectileDelay = 2;
 };

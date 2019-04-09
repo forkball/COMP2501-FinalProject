@@ -32,7 +32,7 @@
 const std::string window_title_g = "Final Assignment - Tower Defense";
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
-const glm::vec3 viewport_background_color_g(0.0, 0.3, 0.0);
+const glm::vec3 viewport_background_color_g(0.3, 0.5, 0.0);
 
 // Global texture info
 GLuint tex[21];
@@ -187,42 +187,42 @@ int main(void){
 					else { playtoggle = true; }
 			}	
 
-				// Clear background
-				window.clear(viewport_background_color_g);
-				glDepthMask(GL_TRUE);
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			// Clear background
+			window.clear(viewport_background_color_g);
+			glDepthMask(GL_TRUE);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-				// Calculate delta time
-				double currentTime = glfwGetTime();
-				double deltaTime = currentTime - lastTime;
-				lastTime = currentTime;
+			// Calculate delta time
+			double currentTime = glfwGetTime();
+			double deltaTime = currentTime - lastTime;
+			lastTime = currentTime;
 
-				// Select proper shader program to use
-				shader.enable();
-				shader.setAttributes();
+			// Select proper shader program to use
+			shader.enable();
+			shader.setAttributes();
 
-				// check pause toggle
-				if (playtoggle) {} else {
-					// Setup camera to focus on the player object (the first object in the gameObjects array)
-					camera->update(deltaTime);
-					//game entity updating
-					board->update(deltaTime);
-				}
-					//game entity rendering
-					board->render(shader, particleSystem);
+			// check pause toggle
+			if (playtoggle) {} else {
+				// Setup camera to focus on the player object (the first object in the gameObjects array)
+				camera->update(deltaTime);
+				//game entity updating
+				board->update(deltaTime);
+			}
+			//game entity rendering
+			board->render(shader, particleSystem);
 				
 
-				//particle system set up//get ready to draw particles
-				particleSystem.enable();
-				particleSystem.setAttributes();
-				particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
+			//particle system set up//get ready to draw particles
+			particleSystem.enable();
+			particleSystem.setAttributes();
+			particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
 
-				// Update other events like input handling
-				glfwPollEvents();
+			// Update other events like input handling
+			glfwPollEvents();
 
-				// Push buffer drawn in the background onto the display
-				glfwSwapBuffers(window.getWindow());
-			}
+			// Push buffer drawn in the background onto the display
+			glfwSwapBuffers(window.getWindow());
+		}
 		
 	}
 	catch (std::exception &e){
