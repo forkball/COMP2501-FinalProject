@@ -73,8 +73,24 @@ void Tower::update(double deltaTime, std::vector<Unit*> enemies)
 				if (dist <= 0.2)
 				{
 					//to-do different prices per unit
-					if (enem->getHealth() - proj->getDamage() <= 0)
-						((Castle*)parent)->addFunds(25);
+					if (enem->getHealth() - proj->getDamage() <= 0) {
+						double totalFunds = 0;
+						switch (enem->getType()) {
+						case 0:
+							totalFunds = 20;
+							break;
+						case 1:
+							totalFunds = 10;
+							break;
+						case 2:
+							totalFunds = 50;
+							break;
+						case 3: 
+							totalFunds = 30;
+							break;
+						}
+						((Castle*)parent)->addFunds(totalFunds);
+					}
 					enem->takeDamage(proj->getDamage());
 					switch (type) {
 						case 2:
@@ -104,7 +120,7 @@ void Tower::render(Shader& shader, ParticleSystem &ps)
 		
 		ps.enable();
 		ps.setAttributes();
-		ps.drawParticles(position, orientation - 80, projectileTexture, 1000);
+		ps.drawParticles(position, 6, orientation - 80, projectileTexture, 250);
 	}
 
 	shader.enable();

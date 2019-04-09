@@ -24,6 +24,10 @@ public:
 	//spend funds, return if funds were spent or not
 	bool spendFunds(double funds);
 	inline void addFunds(double funds) { this->funds += funds; }
+	//shooting functions
+	void shoot(glm::vec3 target, int damage);
+	void removeProjectile(int index);
+	inline std::vector<Projectile*> getProjectiles() { return projectiles; }
 	//getters
 	inline std::vector<Tower*> getTowers() { return towers; }
 	inline std::vector<Unit*> getUnits() { return units; }
@@ -35,6 +39,8 @@ public:
 	inline void addUnit(Unit* u) { units.push_back(u); }
 	inline void addTower(Tower* t) { towers.push_back(t); }
 private:
+	//holds projectiles
+	std::vector<Projectile*> projectiles;
 	GLint numElem;
 	//holds all units
 	std::vector<Unit*> units;
@@ -46,8 +52,6 @@ private:
 	std::vector<GLuint> towerTextures;
 	//holds textures of projectiles
 	std::vector<GLuint> projectileTextures;
-	//reference to the particle system
-	ParticleSystem particleSystem;
 	bool playerControlled;
 	double health,
 		   funds = 100;

@@ -26,6 +26,7 @@ public:
 	inline void takeDamage(double dmg) { health -= dmg; }
 	inline void freeze() { freezeSlow = true; }
 	inline double getHealth() { return health; }
+	inline int getType() { return type; }
 private:
 	GLuint freezeTexture;
 	GLuint size;

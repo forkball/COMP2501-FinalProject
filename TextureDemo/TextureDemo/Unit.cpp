@@ -148,8 +148,24 @@ void Unit::update(double deltaTime, std::vector<Unit*> enemies)
 			if (dist < 0.2)
 			{
 				//to-do different prices per unit
-				if (enemy->getHealth() - proj->getDamage() <= 0)
-					((Castle*)parent)->addFunds(25);
+				if (enemy->getHealth() - proj->getDamage() <= 0) {
+					double totalFunds = 0;
+					switch (enemy->getType()) {
+					case 0:
+						totalFunds = 20;
+						break;
+					case 1:
+						totalFunds = 10;
+						break;
+					case 2:
+						totalFunds = 50;
+						break;
+					case 3:
+						totalFunds = 30;
+						break;
+					}
+					((Castle*)parent)->addFunds(totalFunds);
+				}	
 				enemy->takeDamage(proj->getDamage());
 				removeProjectile(i);
 				break;
@@ -170,7 +186,7 @@ void Unit::render(Shader& shader, ParticleSystem &ps)
 	if (freezeSlow) {
 		ps.enable();
 		ps.setAttributes();
-		ps.drawParticles(position, 0, tex[20], 10);
+		ps.drawParticles(position, 1.0f, 0, tex[20], 5.0f);
 	}
 
 	shader.enable();

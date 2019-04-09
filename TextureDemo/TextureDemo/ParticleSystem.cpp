@@ -103,7 +103,7 @@ void ParticleSystem::createParticleArray(void)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(manyface), manyface, GL_STATIC_DRAW);
 }
 
-void ParticleSystem::drawParticles(glm::vec3 position, float rotation, GLuint texture, int particlesize)
+void ParticleSystem::drawParticles(glm::vec3 position, float speed, float rotation, GLuint texture, int particlesize)
 {
 	glDepthMask(GL_FALSE);
 	// Select proper shader program to use
@@ -112,6 +112,7 @@ void ParticleSystem::drawParticles(glm::vec3 position, float rotation, GLuint te
 	//set displacement
 	int matrixLocation = glGetUniformLocation(getShaderID(), "x");
 	int timeLocation = glGetUniformLocation(getShaderID(), "time");
+	int pSpeedLocation = glGetUniformLocation(getShaderID(), "pSpeed");
 
 	glm::mat4 rot = glm::mat4();
 	rot = glm::translate(rot, position);
@@ -122,6 +123,7 @@ void ParticleSystem::drawParticles(glm::vec3 position, float rotation, GLuint te
 	glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &rot[0][0]);
 	float time = glfwGetTime();
 	glUniform1f(timeLocation, time);
+	glUniform1f(pSpeedLocation, speed);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// Draw 

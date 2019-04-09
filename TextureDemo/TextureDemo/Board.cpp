@@ -118,7 +118,7 @@ void Board::createUnit(int castleNumber, int type, bool playerControlled, glm::v
 							 movementSpeed,
 							 graph,
 							 glm::vec3((playerControlled) ? -0.1 : 0.1, 0.15, 1),
-							 (playerControlled) ? glm::vec2(-6.06, -0.32) : glm::vec2(6.06, -0.32),
+							 (playerControlled) ? glm::vec2(-5.88, -0.32) : glm::vec2(5.88, -0.32),
 							 position,
 							 castle->getUnitTextures().at(type),
 							 castle->getNumElem()));

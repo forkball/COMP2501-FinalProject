@@ -11,7 +11,6 @@ Castle::Castle(bool playerControlled,
 			   std::vector<GLuint> unitTextures, 
 			   std::vector<GLuint> towerTextures) 
 	: GameObject(entityPosition, entityTexture, entityNumElements), 
-	  particleSystem(particleSystem),
 	  playerControlled(playerControlled), 
 	  projectileTextures(projectileTextures), 
 	  unitTextures(unitTextures), 
@@ -51,7 +50,7 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 
 			for (int i = 0; i < towers.size(); i++) {
 
-				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2) {
+				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && (towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
 				
 					// only works for player controlled towers due to above condition
 					std::cout << towers[i]->getId() << " yes " << mousePosition.x;
@@ -81,6 +80,15 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 			units.erase(units.begin() + i);
 		}
 	}
+
+	std::cout << otherCastles->getUnits().size() << std::endl;
+	for (int i = 0; i < otherCastles->getUnits().size(); i++) {
+		Unit* enemyUnit = otherCastles->getUnits().at(i);
+
+		if (abs(enemyUnit->getPosition().x - position.x) < 1) {
+			shoot(enemyUnit->getPosition(),15);
+		}
+	}
 }
 
 //renders entitys of castle
@@ -98,4 +106,24 @@ bool Castle::spendFunds(double funds)
 		return true;
 	}
 	return false;
+}
+
+//removes projectile from vector
+void Castle::removeProjectile(int index)
+{
+	Projectile* proj = projectiles.at(index);
+	proj = NULL;
+	delete proj;
+	projectiles.erase(projectiles.begin() + index);
+}
+
+//shoots projectiles at target
+void Castle::shoot(glm::vec3 target, int damage)
+{
+	double horDiff = (target.x - position.x);
+	double verDiff = target.y - (position.y + 0.2);
+	double dist = sqrt((horDiff * horDiff) + (verDiff * verDiff));
+	double unitVectorX = horDiff / dist;
+	double unitVectorY = verDiff / dist;
+	projectiles.push_back(new Projectile(0, position + glm::vec3(0, 0.2, 0), projectileTextures[0], numElements, glm::vec2(unitVectorX, unitVectorY), 2, damage));
 }
