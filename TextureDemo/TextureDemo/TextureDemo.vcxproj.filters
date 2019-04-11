@@ -109,6 +109,12 @@
     <None Include="particle.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="textShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="textShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="particle.vert">

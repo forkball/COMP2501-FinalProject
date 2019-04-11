@@ -35,6 +35,8 @@ public:
 	inline std::vector<GLuint> getTowerTextures() { return towerTextures; }
 	inline std::vector<GLuint> getProjectileTextures() { return projectileTextures; }
 	inline GLint getNumElem() { return numElem; }
+	inline double getHealth() { return health; }
+	inline double getFunds() { return funds; }
 	//add to vectors
 	inline void addUnit(Unit* u) { units.push_back(u); }
 	inline void addTower(Tower* t) { towers.push_back(t); }

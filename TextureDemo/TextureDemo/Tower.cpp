@@ -5,6 +5,7 @@ Tower::Tower(GameObject* parent, int type, bool playerControlled, glm::vec3 towe
 	: GameObject(entityPosition, entityTexture, entityNumElements), parent(parent), type(type), playerControlled(playerControlled), projectileTexture(projectileTexture), size(entityNumElements)
 {
 	scale = towerScale;
+	health = 100;
 }
 
 Tower::~Tower()
@@ -130,6 +131,7 @@ void Tower::render(Shader& shader, ParticleSystem &ps)
 }
 
 //removes projectile from vector
+
 void Tower::removeProjectile(int index)
 {
 	Projectile* proj = projectiles.at(index);

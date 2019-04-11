@@ -206,6 +206,7 @@ void Unit::removeProjectile(int index)
 //shoots projectiles at target
 void Unit::shoot(glm::vec3 target, GLuint projectileTexture, int damage)
 {
+	std::cout << "shoot" << std::endl;
 	double horDiff = (target.x - position.x);
 	double verDiff = target.y - (position.y + 0.2);
 	double dist = sqrt((horDiff * horDiff) + (verDiff * verDiff));

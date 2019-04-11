@@ -18,6 +18,7 @@ Castle::Castle(bool playerControlled,
 	  towerTextures(towerTextures)
 {
 	scale = spriteScale;
+	health = 100;
 }
 
 //destructor
@@ -40,14 +41,10 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	//player controls
 	if (playerControlled)
 	{
-		std::cout << funds << std::endl;
 		#pragma region Mouse Control
 		static int oldMouseState = GLFW_RELEASE;
 		int newMouseState = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
 		if (newMouseState == GLFW_RELEASE && oldMouseState == GLFW_PRESS) {
-			std::cout << mousePosition.x << std::endl;
-			std::cout << position.x << std::endl;
-
 			for (int i = 0; i < towers.size(); i++) {
 
 				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && (towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
@@ -81,7 +78,6 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 		}
 	}
 
-	std::cout << otherCastles->getUnits().size() << std::endl;
 	for (int i = 0; i < otherCastles->getUnits().size(); i++) {
 		Unit* enemyUnit = otherCastles->getUnits().at(i);
 

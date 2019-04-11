@@ -185,6 +185,8 @@
     <None Include="particle.frag" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
+    <None Include="textShader.frag" />
+    <None Include="textShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="particle.vert" />

@@ -23,6 +23,9 @@ public:
 	void createUnit(int castleNumber, int type, bool playerControlled, glm::vec3 position);
 	void createTower(int castleNumber, int type, bool playerControlled, glm::vec3 position);
 
+	//getter
+	inline vector<Castle*> getCastles() { return castles; }
+
 private:
 	ParticleSystem* particleSystem;
 	Graph* graph;

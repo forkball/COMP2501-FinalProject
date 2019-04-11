@@ -1,17 +1,18 @@
 // COMP 2501 Final Project
 // Eros Di Pede (101035030)
 // Martin Nikolovski (101042483)
+
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
 #include <locale>
 #define GLEW_STATIC
-#include <GL/glew.h> // window management library
+#include <GL/glew.h>
 #include <GL/glfw3.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp> //
-#include <SOIL/SOIL.h> // read image file
+#include <glm/gtc/matrix_transform.hpp> 
+#include <SOIL/SOIL.h>
 #include <chrono>
 #include <thread>
 #include "glm/ext.hpp"
@@ -130,13 +131,11 @@ void setallTexture(void)
 }
 
 	// implemented from pinball assignment
-void renderText(std::string &stringToRender, Shader &textShader, Camera *camera, GLfloat x, GLfloat y, GLfloat z, GLfloat size) {
+void renderText(std::string &stringToRender, Shader &textShader, Camera *camera, glm::vec3 color, glm::vec3 position, GLfloat size) {
 	// Enable the shader and bind the proper text spritesheet texture
 	textShader.enable();
 	textShader.setAttributes();
 	glBindTexture(GL_TEXTURE_2D, tex[21]);
-
-
 
 	// Loop through each character and draw it
 	for (int i = 0; i < stringToRender.size(); i++) {
@@ -156,7 +155,7 @@ void renderText(std::string &stringToRender, Shader &textShader, Camera *camera,
 		int charCol = ascii % spritesheetSize;
 
 		// Before we draw, we need to setup the transformation matrix for the text
-		glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(x + (z * i), y, 0.0f));
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(position.x + (position.z * i), position.y, 0.0f));
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(size, size, 1.0f));
 		//glm::mat4 view = camera->getViewMatrix();
 		//glm::mat4 transformationMatrix = translation * scale * camera->getViewMatrix();
@@ -167,7 +166,7 @@ void renderText(std::string &stringToRender, Shader &textShader, Camera *camera,
 		textShader.setUniform1i("charCol", charCol);
 		textShader.setUniform1i("charRow", charRow);
 		textShader.setUniformMat4("transformationMatrix", transformationMatrix);
-		textShader.setUniform3f("textColour", glm::vec3(1.0f, 0.0f, 0.0f));
+		textShader.setUniform3f("textColour", color);
 
 		// Finally draw the character
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -209,40 +208,31 @@ int main(void){
 		vector<GLuint> castleTwoUnitTextures = { tex[3], tex[7], tex[9], tex[5] };
 
 		vector<GLuint> projectileTextures = { tex[17], tex[18], tex[19] };
-		
+
 		vector<GLuint> castleOneTowerTextures = { tex[10], tex[12], tex[14] };
 		vector<GLuint> castleTwoTowerTextures = { tex[11], tex[13], tex[15] };
 
 		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
 
 		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,projectileTextures,castleOneUnitTextures,castleOneTowerTextures),
-									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures)};
+									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures) };
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
-		Camera* camera = new Camera(shader,window,glm::vec2(window_width_g,window_height_g));
+		double pauseTimer = glfwGetTime();
+		double pauseDelay = 0.3;
+		Camera* camera = new Camera(shader, window, glm::vec2(window_width_g, window_height_g));
 		Board* board = new Board(camera, &particleSystem, graph, castles);
 
 		static bool playtoggle = false;
-		static bool startstate = true;
+		static int startState = 0;
 
 		GameObject pause(glm::vec3(0.0f, 0.0f, 0.0f), tex[22], 200);
 		GameObject startscreen(glm::vec3(0.0f, 0.0f, 0.0f), tex[23], 200);
-		
 
-		while (!glfwWindowShouldClose(window.getWindow())) {
 
-			// press P to change pause toggle
-			if (glfwGetKey(window.getWindow(), GLFW_KEY_P) == GLFW_PRESS) {
-
-					if (playtoggle == true) {
-
-					playtoggle = false;
-
-					}
-					else { playtoggle = true; }
-			}	
-
+		while (!glfwWindowShouldClose(window.getWindow()))
+		{
 			// Clear background
 			window.clear(viewport_background_color_g);
 			glDepthMask(GL_TRUE);
@@ -256,31 +246,60 @@ int main(void){
 			// Select proper shader program to use
 			shader.enable();
 			shader.setAttributes();
-			
-
-			if (startstate) {
+			switch (startState) {
+			case 0:
 				camera->update(0);
-				startscreen.renderbig(shader, camera);
-				if (glfwGetKey(window.getWindow(), GLFW_KEY_ENTER) == GLFW_PRESS) startstate = false;
+				renderText(std::string("Kingdom Seige"), textShader, camera, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
+				shader.enable();
+				
+				glBindTexture(GL_TEXTURE_2D, tex[0]); 
+				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), glm::vec3(0)) * glm::scale(glm::mat4(1.0f), glm::vec3(2)));
+				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+				
+				renderText(std::string("Press SPACE to Start"), textShader, camera, glm::vec3(1.0), glm::vec3(-0.65f, -0.65f, 0.07f), 0.1);
+				shader.enable();
 
-			} else {
-
-				// check pause toggle
-				if (playtoggle) {
-
-					camera->update(0);
-					//pause.renderbig(shader, camera);
-					// Now render the text
-					renderText(std::string("PAUSED"), textShader, camera, -0.7f, 0.0f, 0.25f, 0.3f);
-					shader.enable();
-
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) startState = 1;
+				break;
+			case 1:
+				// press P to change pause toggle
+				if ((glfwGetTime() - pauseTimer) > pauseDelay) {
+					if (glfwGetKey(window.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+					{
+						playtoggle = !playtoggle;
+						pauseTimer = glfwGetTime();
+					}
 				}
-				else {
-					// Setup camera to focus on the player object (the first object in the gameObjects array)
+				// check pause toggle
+				if (playtoggle)
+				{
+					camera->update(0);
+					// Now render the text
+					renderText(std::string("PAUSED"), textShader, camera, glm::vec3(1.0), glm::vec3(-0.1f, 0.65f, 0.05f), 0.1f);
+					shader.enable();
+				}
+				else
+				{
+					// Setup camera to focus on the player object (the first object in the gameObjects array) 
 					camera->update(deltaTime);
 					//game entity updating
 					board->update(deltaTime);
 				}
+
+				#pragma region GUI Rendering
+				//health
+				int c1Health = (board->getCastles().at(0)->getHealth());
+				int c2Health = (board->getCastles().at(1)->getHealth());
+				renderText(std::string("Castle 1 Health " + std::to_string(c1Health)), textShader, camera, glm::vec3(1.0), glm::vec3(-0.95f, 0.95f, 0.03f), 0.06f);
+				renderText(std::string("Castle 2 Health " + std::to_string(c2Health)), textShader, camera, glm::vec3(1.0), glm::vec3(0.40f, 0.95f, 0.03f), 0.06f);
+
+				//funds
+				int c1Funds = (board->getCastles().at(0)->getFunds());
+				int c2Funds = (board->getCastles().at(1)->getFunds());
+				renderText(std::string("Castle 1 Funds " + std::to_string(c1Funds)), textShader, camera, glm::vec3(1.0), glm::vec3(-0.95f, 0.90f, 0.03f), 0.06f);
+				renderText(std::string("Castle 2 Funds " + std::to_string(c2Funds)), textShader, camera, glm::vec3(1.0), glm::vec3(0.40f, 0.90f, 0.03f), 0.06f);
+				shader.enable();
+				#pragma endregion
 
 				//game entity rendering
 				board->render(shader, particleSystem);
@@ -289,6 +308,7 @@ int main(void){
 				particleSystem.enable();
 				particleSystem.setAttributes();
 				particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
+				break;
 
 			}
 
@@ -298,7 +318,6 @@ int main(void){
 			// Push buffer drawn in the background onto the display
 			glfwSwapBuffers(window.getWindow());
 		}
-		
 	}
 	catch (std::exception &e){
 		// print exception and sleep so error can be read

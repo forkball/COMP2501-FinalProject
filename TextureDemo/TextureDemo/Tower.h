@@ -22,6 +22,7 @@ public:
 	void shoot(glm::vec3 target, int damage);
 	void removeProjectile(int index);
 	inline std::vector<Projectile*> getProjectiles() { return projectiles; }
+	inline double getHealth() { return health; }
 private:
 	GameObject* parent;
 	int type = 0;	
