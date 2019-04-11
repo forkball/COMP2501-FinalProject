@@ -41,3 +41,25 @@ void GameObject::render(Shader &shader) {
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
 }
+
+// Renders the GameObject using a shader, also takes in scale
+void GameObject::renderbig(Shader &shader, Camera *camera) {
+	//resets orientation
+	if (orientation > 360) orientation = 0;
+	if (orientation < 0) orientation = 360;
+	// Bind the entities texture
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	// Setup the transformation matrix for the shader
+	// TODO: Add different types of transformations
+	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
+	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), orientation, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 scaleMatrix = glm::scale(glm::mat4(50.0f), glm::vec3(3,3,3));
+
+	// Set the transformation matrix in the shader
+	glm::mat4 transformationMatrix = translationMatrix * rotationMatrix * scaleMatrix * camera->getViewMatrix();
+	shader.setUniformMat4("transformationMatrix", transformationMatrix);
+
+	// Draw the entity
+	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
+}

@@ -24,6 +24,7 @@ public:
 
 	// Renders the GameObject using a shader
 	void render(Shader &shader);
+	void renderbig(Shader &shader, Camera *camera);
 
 	// Getters
 	int getId() { return pid; }

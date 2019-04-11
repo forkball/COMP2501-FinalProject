@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <locale>
 #define GLEW_STATIC
 #include <GL/glew.h> // window management library
 #include <GL/glfw3.h>
@@ -35,7 +36,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.3, 0.5, 0.0);
 
 // Global texture info
-GLuint tex[21];
+GLuint tex[24];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -99,7 +100,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(21, tex);
+	glGenTextures(24, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "knight1.png");
@@ -121,8 +122,57 @@ void setallTexture(void)
 	setthisTexture(tex[18], "flame.png");
 	setthisTexture(tex[19], "freeze.png");
 	setthisTexture(tex[20], "freezeparticle.png");
+	setthisTexture(tex[21], "text.png");
+	setthisTexture(tex[22], "pause.png");
+	setthisTexture(tex[23], "enter.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
+}
+
+	// implemented from pinball assignment
+void renderText(std::string &stringToRender, Shader &textShader, Camera *camera, GLfloat x, GLfloat y, GLfloat z, GLfloat size) {
+	// Enable the shader and bind the proper text spritesheet texture
+	textShader.enable();
+	textShader.setAttributes();
+	glBindTexture(GL_TEXTURE_2D, tex[21]);
+
+
+
+	// Loop through each character and draw it
+	for (int i = 0; i < stringToRender.size(); i++) {
+		// We need to get the character and map it to a UV coordinate the represents where it is located in the text spritesheet texture
+		// First get the character and make sure it is an upper case character (less cases to cover)
+		int ascii = (int)std::toupper(stringToRender[i], std::locale());
+
+		// Convert our ascii value into the range of [0, 35] (0, 1, 2, ... , A, B, C, .... , Z)
+		if (ascii > 57)
+			ascii -= 7;
+		ascii -= 48;
+
+		// Get the row and column of the character in our sprite sheet. Then we will let our vertex shader calculate the proper UVs
+		int spritesheetSize = 6;
+		float charUVSize = 1.0f / spritesheetSize;
+		int charRow = ascii / spritesheetSize;
+		int charCol = ascii % spritesheetSize;
+
+		// Before we draw, we need to setup the transformation matrix for the text
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(x + (z * i), y, 0.0f));
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(size, size, 1.0f));
+		//glm::mat4 view = camera->getViewMatrix();
+		//glm::mat4 transformationMatrix = translation * scale * camera->getViewMatrix();
+		glm::mat4 transformationMatrix = translation * scale;
+
+		// Setup uniforms
+		textShader.setUniform1f("UVSize", charUVSize);
+		textShader.setUniform1i("charCol", charCol);
+		textShader.setUniform1i("charRow", charRow);
+		textShader.setUniformMat4("transformationMatrix", transformationMatrix);
+		textShader.setUniform3f("textColour", glm::vec3(1.0f, 0.0f, 0.0f));
+
+		// Finally draw the character
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	}
+	
 }
 
 // Main function that builds and runs the game
@@ -147,6 +197,7 @@ int main(void){
 
 		// Set up shaders
 		Shader shader("shader.vert", "shader.frag");
+		Shader textShader("textShader.vert", "textShader.frag");
 
 		ParticleSystem particleSystem("particle.vert", "particle.frag");
 
@@ -173,6 +224,11 @@ int main(void){
 		Board* board = new Board(camera, &particleSystem, graph, castles);
 
 		static bool playtoggle = false;
+		static bool startstate = true;
+
+		GameObject pause(glm::vec3(0.0f, 0.0f, 0.0f), tex[22], 200);
+		GameObject startscreen(glm::vec3(0.0f, 0.0f, 0.0f), tex[23], 200);
+		
 
 		while (!glfwWindowShouldClose(window.getWindow())) {
 
@@ -200,22 +256,41 @@ int main(void){
 			// Select proper shader program to use
 			shader.enable();
 			shader.setAttributes();
+			
 
-			// check pause toggle
-			if (playtoggle) {} else {
-				// Setup camera to focus on the player object (the first object in the gameObjects array)
-				camera->update(deltaTime);
-				//game entity updating
-				board->update(deltaTime);
+			if (startstate) {
+				camera->update(0);
+				startscreen.renderbig(shader, camera);
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_ENTER) == GLFW_PRESS) startstate = false;
+
+			} else {
+
+				// check pause toggle
+				if (playtoggle) {
+
+					camera->update(0);
+					//pause.renderbig(shader, camera);
+					// Now render the text
+					renderText(std::string("PAUSED"), textShader, camera, -0.7f, 0.0f, 0.25f, 0.3f);
+					shader.enable();
+
+				}
+				else {
+					// Setup camera to focus on the player object (the first object in the gameObjects array)
+					camera->update(deltaTime);
+					//game entity updating
+					board->update(deltaTime);
+				}
+
+				//game entity rendering
+				board->render(shader, particleSystem);
+
+				//particle system set up//get ready to draw particles
+				particleSystem.enable();
+				particleSystem.setAttributes();
+				particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
+
 			}
-			//game entity rendering
-			board->render(shader, particleSystem);
-				
-
-			//particle system set up//get ready to draw particles
-			particleSystem.enable();
-			particleSystem.setAttributes();
-			particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
 
 			// Update other events like input handling
 			glfwPollEvents();
