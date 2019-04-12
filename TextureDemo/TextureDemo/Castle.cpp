@@ -65,11 +65,11 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 
 						case 0:
 							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(0), this->getNumElem());
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k+4), this->getProjectileTextures().at(0), this->getNumElem());
 							break;
 						case 1:
 							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(1), this->getNumElem());
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k+4), this->getProjectileTextures().at(1), this->getNumElem());
 							break;
 						case 2:
 							k++;
@@ -77,7 +77,7 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 							break;
 						case 3:
 							k = 0;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(3), this->getNumElem());
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k+4), this->getProjectileTextures().at(3), this->getNumElem());
 							break;
 						}
 					}
