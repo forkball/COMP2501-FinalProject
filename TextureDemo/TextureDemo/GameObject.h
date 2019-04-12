@@ -13,7 +13,6 @@
 #include "Window.h"
 #include "Camera.h"
 
-
 class GameObject {
 public:
 
@@ -30,10 +29,12 @@ public:
 	int getId() { return pid; }
 	inline glm::vec3& getPosition() { return position; }
 	inline float getOrientation() { return orientation; }
+	inline void takeDamage(double dmg) { health -= dmg; }
+	inline double getHealth() { return health; }
 	// Setters
 	inline void setPosition(glm::vec3& newPosition) { position = newPosition; }
 protected:
-
+	double health;
 	int pid;
 	// Object's Transform Variables
 	glm::vec3 position;

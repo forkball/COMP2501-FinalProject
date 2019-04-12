@@ -143,7 +143,7 @@ void Tower::removeProjectile(int index)
 //shoots projectiles at target
 void Tower::shoot(glm::vec3 target,int damage)
 {
-	double horDiff = (target.x - position.x);
+	double horDiff = (target.x - position.x); //+ (playerControlled) ? -0.1 : 0.1;
 	double verDiff = target.y - (position.y + 0.2);
 	double dist = sqrt((horDiff * horDiff) + (verDiff * verDiff));
 	double unitVectorX = horDiff / dist;

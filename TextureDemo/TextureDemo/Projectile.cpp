@@ -6,7 +6,8 @@ Projectile::Projectile(int type, glm::vec3 &entityPos, GLuint texture, GLint ent
 	scale = glm::vec3(0.15f);
 }
 
-void Projectile::update(double deltaTime) {
+void Projectile::update(double deltaTime) 
+{
 	// Update object position
 	position.x += (double) (direction.x * speed) * deltaTime;
 	position.y += (double) (direction.y * speed) * deltaTime;

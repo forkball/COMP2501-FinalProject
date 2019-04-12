@@ -23,7 +23,10 @@ public:
 	void update(double deltaTime,glm::vec2 mousePosition, Castle* otherCastles);
 	//spend funds, return if funds were spent or not
 	bool spendFunds(double funds);
+	//increase funds
 	inline void addFunds(double funds) { this->funds += funds; }
+	//takes damage
+	inline void takeDamage(double dmg) { health -= dmg;  }
 	//shooting functions
 	void shoot(glm::vec3 target, int damage);
 	void removeProjectile(int index);

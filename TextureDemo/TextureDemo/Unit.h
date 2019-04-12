@@ -19,23 +19,22 @@ public:
 		 GLuint entityTexture, 
 		 GLint entityNumElements);
 	~Unit();
-	void update(double deltaTime, std::vector<Unit*> enemies);
+	void update(double deltaTime, GameObject* enemyCastle);
 	void render(Shader& shader, ParticleSystem &ps);
 	void shoot(glm::vec3 target, GLuint projectileTexture, int damage);
 	void removeProjectile(int index);
-	inline void takeDamage(double dmg) { health -= dmg; }
 	inline void freeze() { freezeSlow = true; }
-	inline double getHealth() { return health; }
 	inline int getType() { return type; }
 private:
 	GLuint freezeTexture;
 	GLuint size;
 	int type = 0;
 	bool playerControlled, freezeSlow, enemyNear;
-	double health, damage, orgSpeed, movementSpeed, enemyDist, attackDelay, attackTimer = 0, freezeTimer = 0, freezeDelay = 3;
+	double damage, orgSpeed, movementSpeed, enemyDist, attackDelay, attackTimer = 0, freezeTimer = 0, freezeDelay = 3;
 	GameObject* parent;
-	Unit* enemy = NULL;
+	GameObject* enemy = NULL;
 	Graph* graph;
+	glm::vec2 target;
 	std::vector<glm::vec2> path;
 	std::vector<Projectile*> projectiles;
 };

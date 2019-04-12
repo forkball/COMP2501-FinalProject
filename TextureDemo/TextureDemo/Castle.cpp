@@ -69,7 +69,7 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	for (int i = 0; i < units.size(); i++)
 	{
 		Unit* unit = units.at(i);
-		unit->update(deltaTime, otherCastles->getUnits());
+		unit->update(deltaTime, otherCastles);
 		if (unit->getHealth() <= 0)
 		{
 			unit = NULL;

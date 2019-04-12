@@ -131,7 +131,7 @@ void setallTexture(void)
 }
 
 	// implemented from pinball assignment
-void renderText(std::string &stringToRender, Shader &textShader, Camera *camera, glm::vec3 color, glm::vec3 position, GLfloat size) {
+void renderText(std::string &stringToRender, Shader &textShader, glm::vec3 color, glm::vec3 position, GLfloat size) {
 	// Enable the shader and bind the proper text spritesheet texture
 	textShader.enable();
 	textShader.setAttributes();
@@ -157,8 +157,6 @@ void renderText(std::string &stringToRender, Shader &textShader, Camera *camera,
 		// Before we draw, we need to setup the transformation matrix for the text
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(position.x + (position.z * i), position.y, 0.0f));
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(size, size, 1.0f));
-		//glm::mat4 view = camera->getViewMatrix();
-		//glm::mat4 transformationMatrix = translation * scale * camera->getViewMatrix();
 		glm::mat4 transformationMatrix = translation * scale;
 
 		// Setup uniforms
@@ -214,8 +212,8 @@ int main(void){
 
 		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
 
-		vector<Castle*> castles = { new Castle(0,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,projectileTextures,castleOneUnitTextures,castleOneTowerTextures),
-									new Castle(1,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures) };
+		vector<Castle*> castles = {	new Castle(0,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures),
+									new Castle(1,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,projectileTextures,castleOneUnitTextures,castleOneTowerTextures) };
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
@@ -229,7 +227,6 @@ int main(void){
 
 		GameObject pause(glm::vec3(0.0f, 0.0f, 0.0f), tex[22], 200);
 		GameObject startscreen(glm::vec3(0.0f, 0.0f, 0.0f), tex[23], 200);
-
 
 		while (!glfwWindowShouldClose(window.getWindow()))
 		{
@@ -249,20 +246,62 @@ int main(void){
 			switch (startState) {
 			case 0:
 				camera->update(0);
-				renderText(std::string("Kingdom Seige"), textShader, camera, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
+				renderText(std::string("Kingdom Seige"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
 				shader.enable();
 				
 				glBindTexture(GL_TEXTURE_2D, tex[0]); 
 				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), glm::vec3(0)) * glm::scale(glm::mat4(1.0f), glm::vec3(2)));
 				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
 				
-				renderText(std::string("Press SPACE to Start"), textShader, camera, glm::vec3(1.0), glm::vec3(-0.65f, -0.65f, 0.07f), 0.1);
+				renderText(std::string("Press SPACE to Start"), textShader, glm::vec3(1.0), glm::vec3(-0.65f, -0.65f, 0.07f), 0.1);
 				shader.enable();
 
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) startState = 1;
 				break;
 			case 1:
-				// press P to change pause toggle
+				#pragma region GUI Rendering
+				//health
+				int c1Health = (board->getCastles().at(1)->getHealth());
+				int c2Health = (board->getCastles().at(0)->getHealth());
+				renderText(std::string("Castle 1 Health " + std::to_string(c1Health)), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.95f, 0.03f), 0.06f);
+				renderText(std::string("Castle 2 Health " + std::to_string(c2Health)), textShader, glm::vec3(1.0), glm::vec3(0.40f, 0.95f, 0.03f), 0.06f);
+
+				//funds
+				int c1Funds = (board->getCastles().at(1)->getFunds());
+				int c2Funds = (board->getCastles().at(0)->getFunds());
+				renderText(std::string("Castle 1 Funds " + std::to_string(c1Funds)), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.90f, 0.03f), 0.06f);
+				renderText(std::string("Castle 2 Funds " + std::to_string(c2Funds)), textShader, glm::vec3(1.0), glm::vec3(0.40f, 0.90f, 0.03f), 0.06f);
+				shader.enable();
+
+				glBindTexture(GL_TEXTURE_2D, tex[2]);
+				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.80, 1.6, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
+				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+
+				glBindTexture(GL_TEXTURE_2D, tex[6]);
+				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.80, 1.4, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
+				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+
+				glBindTexture(GL_TEXTURE_2D, tex[8]);
+				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.80, 1.2, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
+				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+
+				glBindTexture(GL_TEXTURE_2D, tex[4]);
+				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.80, 1.0, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
+				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+
+				renderText(std::string("1"), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.80f, 0.03f), 0.06f);
+				renderText(std::string("2"), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.70f, 0.03f), 0.06f);
+				renderText(std::string("3"), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.60f, 0.03f), 0.06f);
+				renderText(std::string("4"), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.50f, 0.03f), 0.06f);
+
+				renderText(std::string("25"), textShader, glm::vec3(1.0), glm::vec3(-0.85f, 0.80f, 0.03f), 0.06f);
+				renderText(std::string("10"), textShader, glm::vec3(1.0), glm::vec3(-0.85f, 0.70f, 0.03f), 0.06f);
+				renderText(std::string("100"), textShader, glm::vec3(1.0), glm::vec3(-0.85f, 0.60f, 0.03f), 0.06f);
+				renderText(std::string("50"), textShader, glm::vec3(1.0), glm::vec3(-0.85f, 0.50f, 0.03f), 0.06f);
+				shader.enable();
+				#pragma endregion
+
+				// press esc to change pause toggle
 				if ((glfwGetTime() - pauseTimer) > pauseDelay) {
 					if (glfwGetKey(window.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
 					{
@@ -270,12 +309,13 @@ int main(void){
 						pauseTimer = glfwGetTime();
 					}
 				}
+
 				// check pause toggle
 				if (playtoggle)
 				{
 					camera->update(0);
 					// Now render the text
-					renderText(std::string("PAUSED"), textShader, camera, glm::vec3(1.0), glm::vec3(-0.1f, 0.65f, 0.05f), 0.1f);
+					renderText(std::string("PAUSED"), textShader, glm::vec3(1.0), glm::vec3(-0.1f, 0.65f, 0.05f), 0.1f);
 					shader.enable();
 				}
 				else
@@ -285,21 +325,6 @@ int main(void){
 					//game entity updating
 					board->update(deltaTime);
 				}
-
-				#pragma region GUI Rendering
-				//health
-				int c1Health = (board->getCastles().at(0)->getHealth());
-				int c2Health = (board->getCastles().at(1)->getHealth());
-				renderText(std::string("Castle 1 Health " + std::to_string(c1Health)), textShader, camera, glm::vec3(1.0), glm::vec3(-0.95f, 0.95f, 0.03f), 0.06f);
-				renderText(std::string("Castle 2 Health " + std::to_string(c2Health)), textShader, camera, glm::vec3(1.0), glm::vec3(0.40f, 0.95f, 0.03f), 0.06f);
-
-				//funds
-				int c1Funds = (board->getCastles().at(0)->getFunds());
-				int c2Funds = (board->getCastles().at(1)->getFunds());
-				renderText(std::string("Castle 1 Funds " + std::to_string(c1Funds)), textShader, camera, glm::vec3(1.0), glm::vec3(-0.95f, 0.90f, 0.03f), 0.06f);
-				renderText(std::string("Castle 2 Funds " + std::to_string(c2Funds)), textShader, camera, glm::vec3(1.0), glm::vec3(0.40f, 0.90f, 0.03f), 0.06f);
-				shader.enable();
-				#pragma endregion
 
 				//game entity rendering
 				board->render(shader, particleSystem);

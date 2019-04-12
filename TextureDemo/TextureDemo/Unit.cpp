@@ -12,9 +12,10 @@ Unit::Unit(GameObject* parent,
 	glm::vec3 &entityPosition,
 	GLuint entityTexture,
 	GLint entityNumElements)
-	: GameObject(entityPosition, entityTexture, entityNumElements), parent(parent), type(type), health(health), playerControlled(playerControlled), orgSpeed(movementSpeed), graph(graph)
+	: GameObject(entityPosition, entityTexture, entityNumElements), parent(parent), type(type), target(target), playerControlled(playerControlled), orgSpeed(movementSpeed), graph(graph)
 {
 	scale = unitScale;
+	this->health = health;
 	health = 100;
 	path = graph->pathfind(glm::vec2(position.x, position.y), target);
 
@@ -53,7 +54,7 @@ Unit::~Unit()
 //renders unit and potential particles
 extern GLuint tex[];
 
-void Unit::update(double deltaTime, std::vector<Unit*> enemies)
+void Unit::update(double deltaTime, GameObject* enemyCastle)
 {
 	//handles freeze status
 	if (freezeSlow) {
@@ -65,7 +66,7 @@ void Unit::update(double deltaTime, std::vector<Unit*> enemies)
 
 	//movement control
 	if (!enemyNear) {
-		if ((path.size() > 0) && (playerControlled == 0)) {
+		if ((path.size() > 0) && (playerControlled == 1)) {
 			if (position.x >= path.at(0).x && position.y >= path.at(0).y)
 				path.erase(path.begin());
 			else if (position.x < path.at(0).x)
@@ -73,7 +74,7 @@ void Unit::update(double deltaTime, std::vector<Unit*> enemies)
 			else if (position.y < path.at(0).y)
 				position.y += movementSpeed * deltaTime;
 		}
-		else if ((path.size() > 0) && (playerControlled == 1)) {
+		else if ((path.size() > 0) && (playerControlled == 0)) {
 			if (position.x <= path.at(0).x && position.y >= path.at(0).y)
 				path.erase(path.begin());
 			else if (position.x > path.at(0).x)
@@ -84,14 +85,23 @@ void Unit::update(double deltaTime, std::vector<Unit*> enemies)
 	}
 
 	//checks if there is an enemy near the unit
-	for (int j = 0; j < enemies.size(); j++)
+	for (int j = 0; j < ((Castle*)enemyCastle)->getUnits().size(); j++)
 	{
-		Unit* enem = enemies.at(j);
+		Unit* enem = ((Castle*)enemyCastle)->getUnits().at(j);
 		double dist = sqrt(pow(enem->getPosition().x - position.x, 2) + pow(enem->getPosition().y - position.y, 2));
 		if (dist <= enemyDist)
 		{
 			enemyNear = true;
 			enemy = enem;
+			break;
+		}
+
+		dist = sqrt(pow(target.x - position.x, 2) + pow(target.y - position.y, 2));
+		if (dist <= enemyDist)
+		{
+			std::cout << "ping" << std::endl;
+			enemyNear = true;
+			enemy = enemyCastle;
 			break;
 		}
 		enemyNear = false;
@@ -130,11 +140,9 @@ void Unit::update(double deltaTime, std::vector<Unit*> enemies)
 		}
 	}
 
-	std::cout << projectiles.size() << std::endl;
 	#pragma region Projectile Collisions
 	for (int i = 0; i < projectiles.size(); i++)
 	{
-		bool hit = false;
 		Projectile* proj = projectiles.at(i);
 		proj->update(deltaTime);
 		double unitDist = sqrt(pow(getPosition().x - proj->getPosition().x, 2) + pow(getPosition().y - proj->getPosition().y, 2));
@@ -147,22 +155,23 @@ void Unit::update(double deltaTime, std::vector<Unit*> enemies)
 			double dist = sqrt(pow(enemy->getPosition().x - proj->getPosition().x, 2) + pow(enemy->getPosition().y - proj->getPosition().y, 2));
 			if (dist < 0.2)
 			{
-				//to-do different prices per unit
 				if (enemy->getHealth() - proj->getDamage() <= 0) {
 					double totalFunds = 0;
-					switch (enemy->getType()) {
-					case 0:
-						totalFunds = 20;
-						break;
-					case 1:
-						totalFunds = 10;
-						break;
-					case 2:
-						totalFunds = 50;
-						break;
-					case 3:
-						totalFunds = 30;
-						break;
+					if (enemy != enemyCastle) {
+						switch (((Unit*)enemy)->getType()) {
+						case 0:
+							totalFunds = 20;
+							break;
+						case 1:
+							totalFunds = 10;
+							break;
+						case 2:
+							totalFunds = 50;
+							break;
+						case 3:
+							totalFunds = 30;
+							break;
+						}
 					}
 					((Castle*)parent)->addFunds(totalFunds);
 				}	
@@ -178,11 +187,6 @@ void Unit::update(double deltaTime, std::vector<Unit*> enemies)
 
 void Unit::render(Shader& shader, ParticleSystem &ps)
 {
-	for (int i = 0; i < projectiles.size(); i++)
-	{
-		projectiles.at(i)->render(shader);
-	}
-
 	if (freezeSlow) {
 		ps.enable();
 		ps.setAttributes();
@@ -190,7 +194,13 @@ void Unit::render(Shader& shader, ParticleSystem &ps)
 	}
 
 	shader.enable();
-	shader.setAttributes();
+	shader.setAttributes(); 
+	
+	for (int i = 0; i < projectiles.size(); i++)
+	{
+		projectiles.at(i)->render(shader);
+	}
+
 	GameObject::render(shader);
 }
 
@@ -206,7 +216,6 @@ void Unit::removeProjectile(int index)
 //shoots projectiles at target
 void Unit::shoot(glm::vec3 target, GLuint projectileTexture, int damage)
 {
-	std::cout << "shoot" << std::endl;
 	double horDiff = (target.x - position.x);
 	double verDiff = target.y - (position.y + 0.2);
 	double dist = sqrt((horDiff * horDiff) + (verDiff * verDiff));

@@ -34,11 +34,13 @@ private:
 	const static double heights[];
 	float spawnDelay = 20,
 		  spawnTimer = 0,
+		  fundsDelay = 5,
+		  fundsTimer = 0,
 	      u1Cost = 25,
-		  u2Cost = 25,
-		  u3Cost = 25,
-		  u4Cost = 25,
+		  u2Cost = 10,
+		  u3Cost = 100,
+		  u4Cost = 50,
 		  createTimer = 0,
-		  createDelay = 1;
+		  createDelay = 0.5;
 };
 

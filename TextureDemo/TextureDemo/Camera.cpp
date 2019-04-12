@@ -47,8 +47,8 @@ void Camera::update(double deltaTime)
 	shader.setUniformMat4("viewMatrix", viewMatrix);
 
 	//zooms camera in and out
-	if (glfwGetKey(Window::getWindow(), GLFW_KEY_Z) == GLFW_PRESS) zoomCamera(-zoomSpeed);
-	else if (glfwGetKey(Window::getWindow(), GLFW_KEY_X) == GLFW_PRESS) zoomCamera(zoomSpeed);
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_Q) == GLFW_PRESS) zoomCamera(-zoomSpeed);
+	else if (glfwGetKey(Window::getWindow(), GLFW_KEY_E) == GLFW_PRESS) zoomCamera(zoomSpeed);
 
 	//resets zoom scale
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_R) == GLFW_PRESS) zoom = 0.5f;
