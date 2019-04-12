@@ -23,6 +23,8 @@ public:
 	void removeProjectile(int index);
 	inline std::vector<Projectile*> getProjectiles() { return projectiles; }
 	inline double getHealth() { return health; }
+	inline int getType() { return type; }
+	void setType(int i) { type = i; }
 private:
 	GameObject* parent;
 	int type = 0;	

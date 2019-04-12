@@ -48,9 +48,33 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 			for (int i = 0; i < towers.size(); i++) {
 
 				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && (towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
-				
+
 					// only works for player controlled towers due to above condition
 					std::cout << towers[i]->getId() << " yes " << mousePosition.x;
+
+					if(spendFunds(10)){
+					switch (towers[i]->getType()) {
+
+					case 0:
+
+						towers[i] = new Tower(this, 1, playerControlled, glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(1), this->getProjectileTextures().at(1), this->getNumElem());
+						break;
+					case 1:
+
+						towers[i] = new Tower(this, 2, playerControlled, glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(2), this->getProjectileTextures().at(2), this->getNumElem());
+						break;
+					case 2:
+
+						// do something?
+
+						break;
+					case 3:
+
+						towers[i] = new Tower(this, 0, playerControlled, glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(0), this->getProjectileTextures().at(0), this->getNumElem());
+						break;
+					}
+				}
+				
 				}
 			
 			}

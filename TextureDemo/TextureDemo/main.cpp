@@ -37,7 +37,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.3, 0.5, 0.0);
 
 // Global texture info
-GLuint tex[24];
+GLuint tex[25];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -101,7 +101,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(24, tex);
+	glGenTextures(25, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "knight1.png");
@@ -126,6 +126,7 @@ void setallTexture(void)
 	setthisTexture(tex[21], "text.png");
 	setthisTexture(tex[22], "pause.png");
 	setthisTexture(tex[23], "enter.png");
+	setthisTexture(tex[24], "sand1.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
@@ -205,10 +206,10 @@ int main(void){
 		vector<GLuint> castleOneUnitTextures = { tex[2], tex[6], tex[8], tex[4] };
 		vector<GLuint> castleTwoUnitTextures = { tex[3], tex[7], tex[9], tex[5] };
 
-		vector<GLuint> projectileTextures = { tex[17], tex[18], tex[19] };
+		vector<GLuint> projectileTextures = { tex[17], tex[18], tex[19], tex[24] };
 
-		vector<GLuint> castleOneTowerTextures = { tex[10], tex[12], tex[14] };
-		vector<GLuint> castleTwoTowerTextures = { tex[11], tex[13], tex[15] };
+		vector<GLuint> castleOneTowerTextures = { tex[10], tex[12], tex[14], tex[24] };
+		vector<GLuint> castleTwoTowerTextures = { tex[11], tex[13], tex[15], tex[24] };
 
 		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
 
@@ -273,6 +274,16 @@ int main(void){
 				renderText(std::string("Castle 2 Funds " + std::to_string(c2Funds)), textShader, glm::vec3(1.0), glm::vec3(0.40f, 0.90f, 0.03f), 0.06f);
 				shader.enable();
 
+				
+				//textShader.enable();
+
+				//GameObject background(glm::vec3(0.0f, 0.0f, 0.0f), tex[2], 6);
+				//textShader.setAttributes();
+				//background.render(textShader);
+
+
+
+				shader.enable();
 				glBindTexture(GL_TEXTURE_2D, tex[2]);
 				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.80, 1.6, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
 				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);

@@ -5,8 +5,9 @@ Board::Board(Camera* camera, ParticleSystem* particleSystem, Graph* graph, vecto
 {
 	spawnTimer = glfwGetTime() - spawnDelay;
 	srand(time(NULL));
-	createTower(1,(int)rand() % 3, 0, glm::vec3(-4.0, 0.5, 0));
-	createTower(1,(int)rand() % 3, 0, glm::vec3(-2.5, 0.5, 0));
+	createTower(1, 3, 0, glm::vec3(-4.0, 0.5, 0));
+	//createTower(1,(int)rand() % 3, 0, glm::vec3(-2.5, 0.5, 0));
+	createTower(1, 3, 0, glm::vec3(-2.5, 0.5, 0));
 	createTower(0,(int)rand() % 3, 1, glm::vec3(4.0, 0.5, 0));
 	createTower(0,(int)rand() % 3, 1, glm::vec3(2.5, 0.5, 0));
 }

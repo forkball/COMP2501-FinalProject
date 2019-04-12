@@ -37,6 +37,7 @@ void Tower::update(double deltaTime, std::vector<Unit*> enemies)
 			flame = (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange);
 			if (flame) {
 				targetPosition = enemies.at(i)->getPosition();
+				enemies.at(i)->takeDamage(0.1);
 				break;
 			}
 		}
@@ -50,6 +51,9 @@ void Tower::update(double deltaTime, std::vector<Unit*> enemies)
 				}
 			}
 		}
+		break;
+	case 3:
+
 		break;
 	}
 	#pragma endregion
@@ -150,3 +154,5 @@ void Tower::shoot(glm::vec3 target,int damage)
 	double unitVectorY = verDiff / dist;
 	projectiles.push_back(new Projectile(type, position + glm::vec3(0,0.2,0), projectileTexture, size, glm::vec2(unitVectorX,unitVectorY), 2, damage));
 }
+
+
