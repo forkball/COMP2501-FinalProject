@@ -274,16 +274,6 @@ int main(void){
 				renderText(std::string("Castle 2 Funds " + std::to_string(c2Funds)), textShader, glm::vec3(1.0), glm::vec3(0.40f, 0.90f, 0.03f), 0.06f);
 				shader.enable();
 
-				
-				//textShader.enable();
-
-				//GameObject background(glm::vec3(0.0f, 0.0f, 0.0f), tex[2], 6);
-				//textShader.setAttributes();
-				//background.render(textShader);
-
-
-
-				shader.enable();
 				glBindTexture(GL_TEXTURE_2D, tex[2]);
 				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.80, 1.6, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
 				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);

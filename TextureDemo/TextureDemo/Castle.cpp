@@ -52,13 +52,8 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 		int newMouseStateleft = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
 		if (newMouseState == GLFW_RELEASE && oldMouseState == GLFW_PRESS) {
 			for (int i = 0; i < towers.size(); i++) {
-
-
-				
-
 				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && (towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
 					// only works for player controlled towers due to above condition
-					
 					if (towers[i]->getPosition().x == -4.0) {
 
 						k = kone;
@@ -70,48 +65,34 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 
 						case 0:
 							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(0), this->getNumElem());
-							
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(0), this->getNumElem());
 							break;
 						case 1:
 							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(1), this->getNumElem());
-							
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(1), this->getNumElem());
 							break;
 						case 2:
 							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(2), this->getNumElem());
-							
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(2), this->getNumElem());
 							break;
 						case 3:
 							k = 0;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(3), this->getNumElem());
-							
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(3), this->getNumElem());
 							break;
 						}
 					}
 
 
 					if (towers[i]->getPosition().x == -4.0) {
-
 						kone = k;
 						std::cout << k;
-
 					}
 					else if (towers[i]->getPosition().x == -2.5) { ktwo = k; }
-				
 				}
-			
 			}
-
 		}
 		for (int i = 0; i < towers.size(); i++) {
-
-
-			
-
 			if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && (towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
-
 				if (towers[i]->getPosition().x == -4.0) {
 
 					k = kone;
@@ -121,12 +102,11 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 				if (newMouseStateleft == GLFW_RELEASE && oldMouseStateleft == GLFW_PRESS) {
 					if (towers[i]->getType() == 3) {
 
-						towers[i] = new Tower(this, k, playerControlled, glm::vec3((playerControlled) ? 0.4 : -0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
+						towers[i] = new Tower(this, k, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
 					}
 				}
 
 				if (towers[i]->getPosition().x == -4.0) {
-
 					kone = k;
 				}
 				else if(towers[i]->getPosition().x == -2.5) { ktwo = k; }
