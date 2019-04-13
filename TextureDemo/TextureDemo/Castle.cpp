@@ -1,5 +1,7 @@
 #include "Castle.h"
 #include <time.h>
+#include <chrono>
+typedef std::chrono::high_resolution_clock Clock;
 
 //constructor
 Castle::Castle(bool playerControlled,
@@ -34,7 +36,8 @@ Castle::~Castle()
 	units.clear();
 }
 
-
+static auto t1 = Clock::now();
+static auto t2 = Clock::now();
 //update function
 void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCastles)
 {
@@ -43,47 +46,84 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	{
 		#pragma region Mouse Control
 		// kone is for left tower, ktwo is for right tower
-		static int kone = 0;
-		static int ktwo = 0;
+		static int kone = 3;
+		static int ktwo = 3;
 		static int k;
+		static int lastchanged;
+		//current time
+		t2 = Clock::now();
+		
 		static int oldMouseState = GLFW_RELEASE;
 		int newMouseState = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_RIGHT);
 		static int oldMouseStateleft = GLFW_RELEASE;
 		int newMouseStateleft = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
-		if (newMouseState == GLFW_RELEASE && oldMouseState == GLFW_PRESS) {
+
+		
 			for (int i = 0; i < towers.size(); i++) {
 				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && (towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
-					// only works for player controlled towers due to above condition
-					if (towers[i]->getPosition().x == -4.0) {
+
+					//time of click
+					t1 = Clock::now();
+					if (newMouseState == GLFW_RELEASE && oldMouseState == GLFW_PRESS) {
+					
+						if (towers[i]->getPosition().x == -4.0) {
 
 						k = kone;
 					}
 					else if (towers[i]->getPosition().x == -2.5)  { k = ktwo; }
 
 					if (towers[i]->getType() == 3) {
+
+						
+						
+						lastchanged = i;
+
 						switch (k) {
 
 						case 0:
 							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k + 3), this->getProjectileTextures().at(0), this->getNumElem());
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k+4), this->getProjectileTextures().at(0), this->getNumElem());
+
 							break;
 						case 1:
 							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k + 3), this->getProjectileTextures().at(1), this->getNumElem());
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k+4), this->getProjectileTextures().at(1), this->getNumElem());
+
 							break;
 						case 2:
+							k++;
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(2), this->getNumElem());
+
+							break;
+						case 3:
 							k = 0;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k + 3), this->getProjectileTextures().at(2), this->getNumElem());
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k+4), this->getProjectileTextures().at(3), this->getNumElem());
+
 							break;
 						}
+
+				
 					}
 
 
 					if (towers[i]->getPosition().x == -4.0) {
 						kone = k;
-						std::cout << k;
-					}
+						}
 					else if (towers[i]->getPosition().x == -2.5) { ktwo = k; }
+				}
+			}
+		}
+	
+
+		if (((towers[lastchanged]->getPosition().x - mousePosition.x) < 0.2 && (towers[lastchanged]->getPosition().x - mousePosition.x) > -0.2 && (towers[lastchanged]->getPosition().y + mousePosition.y) < 0.4 && (towers[lastchanged]->getPosition().y + mousePosition.y) > -0.4) == false) {
+			
+			if (towers[lastchanged]->getType() == 3) {
+				if ((t2 - t1).count() > 1000000000) {
+
+					kone = 3;
+					ktwo = 3;
+					towers[lastchanged] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[lastchanged]->getPosition(), this->getTowerTextures().at(3), this->getProjectileTextures().at(2), this->getNumElem());
+
 				}
 			}
 		}
