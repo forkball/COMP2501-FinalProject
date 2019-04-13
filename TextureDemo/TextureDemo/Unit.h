@@ -25,6 +25,7 @@ public:
 	void removeProjectile(int index);
 	inline void freeze() { freezeSlow = true; }
 	inline int getType() { return type; }
+	inline double getDamage() { return damage; }
 private:
 	GLuint freezeTexture;
 	GLuint size;

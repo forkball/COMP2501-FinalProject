@@ -68,7 +68,7 @@ void Board::update(double deltaTime)
 			break;
 		case 3:
 			if (castles.at(0)->spendFunds(u4Cost)) {
-				createUnit(0, 3, 0, glm::vec3(4.92, heights[(int)rand() % 3], 0));
+				//createUnit(0, 3, 0, glm::vec3(4.92, heights[(int)rand() % 3], 0));
 				spawnTimer = glfwGetTime();
 			}
 			break;

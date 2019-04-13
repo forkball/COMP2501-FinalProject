@@ -249,20 +249,23 @@ int main(void){
 			shader.setAttributes();
 			switch (startState) {
 			case 0:
+			{
 				camera->update(0);
 				renderText(std::string("Kingdom Seige"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
 				shader.enable();
-				
-				glBindTexture(GL_TEXTURE_2D, tex[0]); 
+
+				glBindTexture(GL_TEXTURE_2D, tex[0]);
 				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), glm::vec3(0)) * glm::scale(glm::mat4(1.0f), glm::vec3(2)));
 				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
-				
+
 				renderText(std::string("Press SPACE to Start"), textShader, glm::vec3(1.0), glm::vec3(-0.65f, -0.65f, 0.07f), 0.1);
 				shader.enable();
 
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) startState = 1;
 				break;
+			}
 			case 1:
+			{
 				#pragma region GUI Rendering
 				//health
 				int c1Health = (board->getCastles().at(1)->getHealth());
@@ -338,7 +341,29 @@ int main(void){
 				particleSystem.setAttributes();
 				particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
 				break;
+			}
+			case 2:
+				camera->update(0);
+				renderText(std::string("DEFEAT"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
+				shader.enable();
+				break;
+			case 3:
+				camera->update(0);
+				renderText(std::string("VICTORY"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
+				shader.enable();
+				break;
+			}
 
+			for (int i = 0; i < board->getCastles().size(); i++)
+			{
+				if (board->getCastles().at(0)->getHealth() <= 0)
+				{
+					startState = 2;
+				}
+				else if (board->getCastles().at(1)->getHealth() <= 0)
+				{
+					startState = 3;
+				}
 			}
 
 			// Update other events like input handling

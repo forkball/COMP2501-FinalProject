@@ -128,6 +128,11 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	{
 		Unit* unit = units.at(i);
 		unit->update(deltaTime, otherCastles);
+		if (abs(unit->getPosition().x - otherCastles->getPosition().x) <= 0.5)
+		{
+			otherCastles->takeDamage(unit->getDamage() * 0.5);
+			unit->takeDamage(100);
+		}
 		if (unit->getHealth() <= 0)
 		{
 			unit = NULL;
