@@ -119,11 +119,9 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 			
 			if (towers[lastchanged]->getType() == 3) {
 				if ((t2 - t1).count() > 1000000000) {
-
 					kone = 3;
 					ktwo = 3;
 					towers[lastchanged] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[lastchanged]->getPosition(), this->getTowerTextures().at(3), this->getProjectileTextures().at(2), this->getNumElem());
-
 				}
 			}
 		}
@@ -137,8 +135,20 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 
 				if (newMouseStateleft == GLFW_RELEASE && oldMouseStateleft == GLFW_PRESS) {
 					if (towers[i]->getType() == 3) {
-
-						towers[i] = new Tower(this, k, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
+						switch (k) {
+						case 0:
+							if (spendFunds(t1Cost))
+								towers[i] = new Tower(this, k, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
+							break;
+						case 1:
+							if (spendFunds(t2Cost))
+								towers[i] = new Tower(this, k, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
+							break;
+						case 2: 
+							if (spendFunds(t3Cost))
+								towers[i] = new Tower(this, k, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
+							break;
+						}
 					}
 				}
 

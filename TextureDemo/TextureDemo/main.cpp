@@ -216,20 +216,22 @@ int main(void){
 
 		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
 
-		vector<Castle*> castles = {	new Castle(0,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures),
+		vector<Castle*> castles = { new Castle(0,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures),
 									new Castle(1,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,projectileTextures,castleOneUnitTextures,castleOneTowerTextures) };
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
 		double pauseTimer = glfwGetTime();
+		double toMainTimer = glfwGetTime();
 		double pauseDelay = 0.3;
+		double toMainDelay = 0.3;
 		Camera* camera = new Camera(shader, window, glm::vec2(window_width_g, window_height_g));
 		Board* board = new Board(camera, &particleSystem, graph, castles);
 
 		static bool playtoggle = false;
 		static int startState = 0;
 
-		GameObject pause(glm::vec3(0.0f, 0.0f, 0.0f), tex[22], 200);
+		GameObject pause = GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex[22], 200);
 		GameObject startscreen(glm::vec3(0.0f, 0.0f, 0.0f), tex[23], 200);
 
 		while (!glfwWindowShouldClose(window.getWindow()))
@@ -261,7 +263,17 @@ int main(void){
 				renderText(std::string("Press SPACE to Start"), textShader, glm::vec3(1.0), glm::vec3(-0.65f, -0.65f, 0.07f), 0.1);
 				shader.enable();
 
-				if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) startState = 1;
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
+					if ((glfwGetTime() - toMainTimer) > toMainDelay)
+					{
+						toMainTimer = glfwGetTime();
+						startState = 1;
+						lastTime = glfwGetTime();
+						castles = { new Castle(0,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures),
+									new Castle(1,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,projectileTextures,castleOneUnitTextures,castleOneTowerTextures) };
+						board = new Board(camera, &particleSystem, graph, castles);
+					}
+				}
 				break;
 			}
 			case 1:
@@ -340,30 +352,34 @@ int main(void){
 				particleSystem.enable();
 				particleSystem.setAttributes();
 				particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
+
+				for (int i = 0; i < board->getCastles().size(); i++)
+				{
+					if (board->getCastles().at(0)->getHealth() <= 0)
+					{
+						startState = 3;
+						toMainTimer = glfwGetTime();
+					}
+					else if (board->getCastles().at(1)->getHealth() <= 0)
+					{
+						startState = 2;
+						toMainTimer = glfwGetTime();
+					}
+				}
 				break;
 			}
 			case 2:
 				camera->update(0);
-				renderText(std::string("DEFEAT"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
+				renderText(std::string("Kingdom Seige"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
+				renderText(std::string("DEFEAT"), textShader, glm::vec3(1.0), glm::vec3(-0.22f, 0.45f, 0.1f), 0.12f);
 				shader.enable();
 				break;
 			case 3:
 				camera->update(0);
-				renderText(std::string("VICTORY"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
-				shader.enable();
+				renderText(std::string("Kingdom Seige"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
+				renderText(std::string("VICTORY"), textShader, glm::vec3(1.0), glm::vec3(-0.3f, 0.45f, 0.1f), 0.12f);
+				shader.enable(); 
 				break;
-			}
-
-			for (int i = 0; i < board->getCastles().size(); i++)
-			{
-				if (board->getCastles().at(0)->getHealth() <= 0)
-				{
-					startState = 2;
-				}
-				else if (board->getCastles().at(1)->getHealth() <= 0)
-				{
-					startState = 3;
-				}
 			}
 
 			// Update other events like input handling

@@ -168,7 +168,6 @@ Node& Graph::getNode(int id) {
 std::vector<glm::vec2> Graph::pathfind(glm::vec2 start, glm::vec2 end) {
 	int startNodeId = getNodeIdFromCoords(start.x, start.y),
 		endNodeId = getNodeIdFromCoords(end.x, end.y);
-	std::cout << endNodeId << std::endl;
 	//final path
 	vector<glm::vec2> finalPath;
 	//priority queue used in pathfinding.

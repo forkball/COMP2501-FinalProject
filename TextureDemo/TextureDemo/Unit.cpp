@@ -95,15 +95,6 @@ void Unit::update(double deltaTime, GameObject* enemyCastle)
 			enemy = enem;
 			break;
 		}
-
-		dist = sqrt(pow(target.x - position.x, 2) + pow(target.y - position.y, 2));
-		if (dist <= enemyDist)
-		{
-			std::cout << "ping" << std::endl;
-			enemyNear = true;
-			enemy = enemyCastle;
-			break;
-		}
 		enemyNear = false;
 		enemy = NULL;
 	}

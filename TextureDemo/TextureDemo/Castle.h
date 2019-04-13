@@ -59,6 +59,9 @@ private:
 	std::vector<GLuint> projectileTextures;
 	bool playerControlled;
 	double health,
-		   funds = 100;
+		funds = 100,
+		t1Cost = 200,
+		t2Cost = 250,
+		t3Cost = 150;
 };
 
