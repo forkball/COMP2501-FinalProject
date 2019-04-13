@@ -209,10 +209,10 @@ int main(void){
 		vector<GLuint> castleOneUnitTextures = { tex[2], tex[6], tex[8], tex[4] };
 		vector<GLuint> castleTwoUnitTextures = { tex[3], tex[7], tex[9], tex[5] };
 
-		vector<GLuint> projectileTextures = { tex[17], tex[18], tex[19], tex[24], tex[24], tex[24], tex[24] };
+		vector<GLuint> projectileTextures = { tex[17], tex[18], tex[19], tex[24], tex[24], tex[24] };
 
-		vector<GLuint> castleOneTowerTextures = { tex[10], tex[12], tex[14], tex[24], tex[25], tex[26], tex[27] };
-		vector<GLuint> castleTwoTowerTextures = { tex[11], tex[13], tex[15], tex[24], tex[25], tex[26], tex[27] };
+		vector<GLuint> castleOneTowerTextures = { tex[10], tex[12], tex[14], tex[25], tex[26], tex[27] };
+		vector<GLuint> castleTwoTowerTextures = { tex[11], tex[13], tex[15], tex[25], tex[26], tex[27] };
 
 		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
 

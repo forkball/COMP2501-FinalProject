@@ -43,8 +43,8 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	{
 		#pragma region Mouse Control
 		// kone is for left tower, ktwo is for right tower
-		static int kone = 3;
-		static int ktwo = 3;
+		static int kone = 0;
+		static int ktwo = 0;
 		static int k;
 		static int oldMouseState = GLFW_RELEASE;
 		int newMouseState = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_RIGHT);
@@ -65,19 +65,15 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 
 						case 0:
 							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k+4), this->getProjectileTextures().at(0), this->getNumElem());
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k + 3), this->getProjectileTextures().at(0), this->getNumElem());
 							break;
 						case 1:
 							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k+4), this->getProjectileTextures().at(1), this->getNumElem());
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k + 3), this->getProjectileTextures().at(1), this->getNumElem());
 							break;
 						case 2:
-							k++;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(2), this->getNumElem());
-							break;
-						case 3:
 							k = 0;
-							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k+4), this->getProjectileTextures().at(3), this->getNumElem());
+							towers[i] = new Tower(this, 3, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k + 3), this->getProjectileTextures().at(2), this->getNumElem());
 							break;
 						}
 					}
