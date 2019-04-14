@@ -134,15 +134,15 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 					if (towers[i]->getType() == 3) {
 						switch (k) {
 						case 0:
-							if (spendFunds(t1Cost))
+							if (this->spendFunds(t1Cost))
 								towers[i] = new Tower(this, k, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
 							break;
 						case 1:
-							if (spendFunds(t2Cost))
+							if (this->spendFunds(t2Cost))
 								towers[i] = new Tower(this, k, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
 							break;
 						case 2: 
-							if (spendFunds(t3Cost))
+							if (this->spendFunds(t3Cost))
 								towers[i] = new Tower(this, k, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
 							break;
 						}						
