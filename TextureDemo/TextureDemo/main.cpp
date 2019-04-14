@@ -37,7 +37,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.3, 0.5, 0.0);
 
 // Global texture info
-GLuint tex[28];
+GLuint tex[30];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -101,7 +101,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(28, tex);
+	glGenTextures(30, tex);
 	setthisTexture(tex[0], "castle1.png");
 	setthisTexture(tex[1], "castle2.png");
 	setthisTexture(tex[2], "knight1.png");
@@ -130,6 +130,8 @@ void setallTexture(void)
 	setthisTexture(tex[25], "tower3.png");
 	setthisTexture(tex[26], "magma3.png");
 	setthisTexture(tex[27], "ice3.png");
+	setthisTexture(tex[28], "orb.png");
+	setthisTexture(tex[29], "proj.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
@@ -209,10 +211,10 @@ int main(void){
 		vector<GLuint> castleOneUnitTextures = { tex[2], tex[6], tex[8], tex[4] };
 		vector<GLuint> castleTwoUnitTextures = { tex[3], tex[7], tex[9], tex[5] };
 
-		vector<GLuint> projectileTextures = { tex[17], tex[18], tex[19], tex[24], tex[24], tex[24], tex[24] };
+		vector<GLuint> projectileTextures = { tex[19], tex[17], tex[18], tex[24], tex[24], tex[24], tex[24] };
 
-		vector<GLuint> castleOneTowerTextures = { tex[10], tex[12], tex[14], tex[24], tex[25], tex[26], tex[27] };
-		vector<GLuint> castleTwoTowerTextures = { tex[11], tex[13], tex[15], tex[24], tex[25], tex[26], tex[27] };
+		vector<GLuint> castleOneTowerTextures = { tex[14], tex[10], tex[12], tex[24], tex[27], tex[25], tex[26] };
+		vector<GLuint> castleTwoTowerTextures = { tex[15], tex[11], tex[13], tex[24], tex[27], tex[25], tex[26] };
 
 		Graph* graph = new Graph(68, 5, GameObject(glm::vec3(0.0f), tex[7], size));
 

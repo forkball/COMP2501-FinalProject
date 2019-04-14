@@ -36,8 +36,12 @@ Castle::~Castle()
 	units.clear();
 }
 
+extern GLuint tex[];
+Powerup P =  Powerup((int)rand() % 1, glm::vec3(1, 1, 1), glm::vec3((int)rand() % 1, (int)rand() % 1, (int)rand() % 1), tex[(int)rand() % 1 + 28], 0);
 static auto t1 = Clock::now();
 static auto t2 = Clock::now();
+static auto t3 = Clock::now();
+
 //update function
 void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCastles)
 {
@@ -58,7 +62,6 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 		static int oldMouseStateleft = GLFW_RELEASE;
 		int newMouseStateleft = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
 
-		
 			for (int i = 0; i < towers.size(); i++) {
 				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && (towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
 
@@ -73,9 +76,6 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 					else if (towers[i]->getPosition().x == -2.5)  { k = ktwo; }
 
 					if (towers[i]->getType() == 3) {
-
-						
-						
 						lastchanged = i;
 
 						switch (k) {
@@ -101,10 +101,7 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 
 							break;
 						}
-
-				
 					}
-
 
 					if (towers[i]->getPosition().x == -4.0) {
 						kone = k;
@@ -148,7 +145,7 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 							if (spendFunds(t3Cost))
 								towers[i] = new Tower(this, k, playerControlled, glm::vec3(-0.4, 0.7, 1), towers[i]->getPosition(), this->getTowerTextures().at(k), this->getProjectileTextures().at(k), this->getNumElem());
 							break;
-						}
+						}						
 					}
 				}
 
@@ -163,6 +160,34 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 		oldMouseStateleft = newMouseStateleft;
 		#pragma endregion
 	}
+
+
+	if ((t2-t3).count() > 10000000000) {
+	
+		t3 = Clock::now();
+	
+			P = new Powerup((int)rand() % 1, glm::vec3(1,1,1), glm::vec3((int)rand() % 1, (int)rand() % 1, (int)rand() % 1), tex[(int)rand() % 1 + 28], 0);
+
+
+
+
+
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//update towers
 	for (int i = 0; i < towers.size(); i++)
@@ -200,6 +225,7 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 void Castle::render(Shader& shader)
 {
 	GameObject::render(shader);
+	//P->render(shader);
 }
 
 //if possible, decrements available funds

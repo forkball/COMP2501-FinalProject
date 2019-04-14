@@ -104,6 +104,8 @@ void Board::update(double deltaTime)
 		}
 	}
 	#pragma endregion
+
+
 }
 
 //renders all board entities 

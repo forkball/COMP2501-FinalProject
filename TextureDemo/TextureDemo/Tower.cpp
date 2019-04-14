@@ -26,7 +26,7 @@ void Tower::update(double deltaTime, std::vector<Unit*> enemies)
 		for (int i = 0; i < enemies.size(); i++) {
 			if (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange) {
 				if ((glfwGetTime() - projectileTimer) > projectileDelay) {
-					shoot(enemies.at(i)->getPosition(), 50);
+					shoot(enemies.at(i)->getPosition(), 25);
 					projectileTimer = glfwGetTime();
 				}
 			}
@@ -34,21 +34,21 @@ void Tower::update(double deltaTime, std::vector<Unit*> enemies)
 		break;
 	case 1:
 		for (int i = 0; i < enemies.size(); i++) {
-			flame = (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange);
-			if (flame) {
-				targetPosition = enemies.at(i)->getPosition();
-				enemies.at(i)->takeDamage(0.1);
-				break;
+			if (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange) {
+				if ((glfwGetTime() - projectileTimer) > projectileDelay) {
+					shoot(enemies.at(i)->getPosition(), 50);
+					projectileTimer = glfwGetTime();
+				}
 			}
 		}
 		break;
 	case 2:
 		for (int i = 0; i < enemies.size(); i++) {
-			if (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange) {
-				if ((glfwGetTime() - projectileTimer) > projectileDelay) {
-					shoot(enemies.at(i)->getPosition(), 25);
-					projectileTimer = glfwGetTime();
-				}
+			flame = (glm::abs(enemies.at(i)->getPosition().x - position.x) <= shootingRange);
+			if (flame) {
+				targetPosition = enemies.at(i)->getPosition();
+				enemies.at(i)->takeDamage(0.1);
+				break;
 			}
 		}
 		break;
@@ -98,7 +98,7 @@ void Tower::update(double deltaTime, std::vector<Unit*> enemies)
 					}
 					enem->takeDamage(proj->getDamage());
 					switch (type) {
-						case 2:
+						case 0:
 							enemies.at(i)->freeze();
 							break;
 					}

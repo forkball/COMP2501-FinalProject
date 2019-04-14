@@ -3,6 +3,7 @@
 #include "Unit.h"
 #include "Tower.h"
 #include "Graph.h"
+#include "Powerup.h"
 
 class Castle :
 	public GameObject
@@ -17,6 +18,7 @@ public:
 		   std::vector<GLuint> unitTextures,
 		   std::vector<GLuint> towerTextures);
 	~Castle();
+	Powerup* P;
 	//render entities
 	void render(Shader &shader);
 	//updates entities
