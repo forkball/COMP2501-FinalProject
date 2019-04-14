@@ -37,7 +37,6 @@ Castle::~Castle()
 }
 
 extern GLuint tex[];
-Powerup P =  Powerup((int)rand() % 1, glm::vec3(1, 1, 1), glm::vec3((int)rand() % 1, (int)rand() % 1, (int)rand() % 1), tex[(int)rand() % 1 + 28], 0);
 static auto t1 = Clock::now();
 static auto t2 = Clock::now();
 static auto t3 = Clock::now();
@@ -51,7 +50,6 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 	//player controls
 	if (playerControlled)
 	{
-		#pragma region Mouse Control
 		// kone is for left tower, ktwo is for right tower
 		static int kone = 3;
 		static int ktwo = 3;
@@ -66,24 +64,22 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 		static int oldMouseState = GLFW_RELEASE;
 		int newMouseState = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_RIGHT);
 		static int oldMouseStateleft = GLFW_RELEASE;
+
+		#pragma region Castle Placement
 		int newMouseStateleft = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
-
 			for (int i = 0; i < towers.size(); i++) {
-				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && (towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
-
+				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && 
+					(towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
 					//time of click
 					t1 = Clock::now();
 					if (newMouseState == GLFW_RELEASE && oldMouseState == GLFW_PRESS) {
-					
 						if (towers[i]->getPosition().x == -4.0) {
-
 						k = kone;
 					}
 					else if (towers[i]->getPosition().x == -2.5)  { k = ktwo; }
 
 					if (towers[i]->getType() == 3) {
 						lastchanged = i;
-
 						switch (k) {
 
 						case 0:
@@ -108,18 +104,17 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 							break;
 						}
 					}
-
 					if (towers[i]->getPosition().x == -4.0) {
 						kone = k;
-						}
+					}
 					else if (towers[i]->getPosition().x == -2.5) { ktwo = k; }
 				}
 			}
 		}
-	
 
-		if (((towers[lastchanged]->getPosition().x - mousePosition.x) < 0.2 && (towers[lastchanged]->getPosition().x - mousePosition.x) > -0.2 && (towers[lastchanged]->getPosition().y + mousePosition.y) < 0.4 && (towers[lastchanged]->getPosition().y + mousePosition.y) > -0.4) == false) {
-			
+		if (((towers[lastchanged]->getPosition().x - mousePosition.x) < 0.2 && (towers[lastchanged]->getPosition().x - mousePosition.x) > -0.2 && 
+			(towers[lastchanged]->getPosition().y + mousePosition.y) < 0.4 && 
+			(towers[lastchanged]->getPosition().y + mousePosition.y) > -0.4) == false) {
 			if (towers[lastchanged]->getType() == 3) {
 				if ((t2 - t1).count() > 1000000000) {
 					kone = 3;
@@ -129,9 +124,9 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 			}
 		}
 		for (int i = 0; i < towers.size(); i++) {
-			if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && (towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
+			if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && 
+				(towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
 				if (towers[i]->getPosition().x == -4.0) {
-
 					k = kone;
 				}
 				else if (towers[i]->getPosition().x == -2.5) { k = ktwo; }
@@ -164,54 +159,25 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 
 		oldMouseState = newMouseState;
 		oldMouseStateleft = newMouseStateleft;
-		#pragma endregion
-
+		#pragma endregion=
 
 		if ((t2 - t3).count() > 10000000000) {
-
 			t3 = Clock::now();
 			powerup = true;
-
 		}
 
-
 		if (newButtonState != oldButtonState) {
-
 			if (powerup) {
-			
-				heal = true;
 				powerup = false;
+				for (int i = 0; i < units.size(); i++)
+				{
+					units.at(i)->powerUp();
+				}
 				t4 = Clock::now();
 				t5 = Clock::now();
 			}
-		
 		}
-
-		if (heal) {
-			
-			if ((t2 - t4).count() < 5000000000) {
-		
-
-				if ((t2 - t5).count() > 1000000000) {
-						this->takeDamage(-5);
-						t5 = Clock::now();
-				}
-			}
-			else {
-				heal = false;
-			}
-
-			oldButtonState = newButtonState;
-
 	}
-
-
-	
-	
-	
-	
-	}
-
 
 	//update towers
 	for (int i = 0; i < towers.size(); i++)
@@ -248,7 +214,6 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 //renders entitys of castle
 void Castle::render(Shader& shader, ParticleSystem &ps)
 {
-
 	if (heal) {
 		ps.enable();
 		ps.setAttributes();
@@ -258,9 +223,7 @@ void Castle::render(Shader& shader, ParticleSystem &ps)
 	shader.enable();
 	shader.setAttributes();
 
-
 	GameObject::render(shader);
-	//P->render(shader);
 }
 
 //if possible, decrements available funds

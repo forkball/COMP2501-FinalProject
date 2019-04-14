@@ -24,25 +24,29 @@ Unit::Unit(GameObject* parent,
 	case 0: 
 		enemyDist = 0.2;
 		attackDelay = 1;
-		damage = 20;
+		orgDamage = 20;
+		damage = orgDamage;
 		break;
 	//archer
 	case 1: 
 		enemyDist = 0.6;
 		attackDelay = 2;
-		damage = 10;
+		orgDamage = 10;
+		damage = orgDamage;
 		break;
 	//catapult
 	case 2: 
 		enemyDist = 0.8;
 		attackDelay = 3;
-		damage = 50;
+		orgDamage = 50;
+		damage = orgDamage;
 		break;
 	//cavalry
 	case 3: 
 		enemyDist = 0.25;
 		attackDelay = 2;
-		damage = 25;
+		orgDamage = 25;
+		damage = orgDamage;
 		break;
 	}
 }
@@ -56,6 +60,14 @@ extern GLuint tex[];
 
 void Unit::update(double deltaTime, GameObject* enemyCastle)
 {
+	if (powerup) {
+		std::cout << "ping";
+		damage = orgDamage * 1.5;
+		if ((glfwGetTime() - powerupTimer) > powerupDuration)
+			powerup = false;
+	}
+	else { damage = orgDamage; powerupTimer = glfwGetTime(); }
+
 	//handles freeze status
 	if (freezeSlow) {
 		if (((glfwGetTime() - freezeTimer) / 1000) > freezeDelay)

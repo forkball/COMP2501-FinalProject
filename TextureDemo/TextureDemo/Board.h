@@ -2,7 +2,6 @@
 #include "Castle.h"
 #include "Unit.h"
 #include "Tower.h"
-#include "Powerup.h"
 #include "Camera.h"
 #include "Graph.h"
 #include "ParticleSystem.h"

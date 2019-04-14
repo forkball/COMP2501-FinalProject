@@ -118,7 +118,7 @@ void setallTexture(void)
 	setthisTexture(tex[13], "magma2.png");
 	setthisTexture(tex[14], "ice1.png");
 	setthisTexture(tex[15], "ice2.png");
-	setthisTexture(tex[16], "orb.png");
+	setthisTexture(tex[16], "powerup.png");
 	setthisTexture(tex[17], "proj1.png");
 	setthisTexture(tex[18], "flame.png");
 	setthisTexture(tex[19], "freeze.png");
@@ -221,21 +221,24 @@ int main(void){
 		vector<Castle*> castles = { new Castle(0,glm::vec3(6,0.5,0),glm::vec3(-2,2,2),tex[1],size,projectileTextures,castleTwoUnitTextures,castleTwoTowerTextures),
 									new Castle(1,glm::vec3(-6,0.5,0),glm::vec3(2,2,2),tex[0],size,projectileTextures,castleOneUnitTextures,castleOneTowerTextures) };
 
-		// Run the main loop
+		//initialize timers
 		double lastTime = glfwGetTime();
 		double pauseTimer = glfwGetTime();
 		double toMainTimer = glfwGetTime();
 		double pauseDelay = 0.3;
 		double toMainDelay = 0.3;
-		Camera* camera = new Camera(shader, window, glm::vec2(window_width_g, window_height_g));
-		Board* board = new Board(camera, &particleSystem, graph, castles);
 
 		static bool playtoggle = false;
 		static int startState = 0;
 
+		//initialize game objects
+		Camera* camera = new Camera(shader, window, glm::vec2(window_width_g, window_height_g));
+		Board* board = new Board(camera, &particleSystem, graph, castles);
+
 		GameObject pause = GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex[22], 200);
 		GameObject startscreen(glm::vec3(0.0f, 0.0f, 0.0f), tex[23], 200);
 
+		// Run the main loop
 		while (!glfwWindowShouldClose(window.getWindow()))
 		{
 			// Clear background
@@ -252,7 +255,7 @@ int main(void){
 			shader.enable();
 			shader.setAttributes();
 			switch (startState) {
-			case 0:
+			case 0: //start screen
 			{
 				camera->update(0);
 				renderText(std::string("Kingdom Seige"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
@@ -278,7 +281,7 @@ int main(void){
 				}
 				break;
 			}
-			case 1:
+			case 1: //main game
 			{
 				#pragma region GUI Rendering
 				//health
@@ -293,6 +296,12 @@ int main(void){
 				renderText(std::string("Castle 1 Funds " + std::to_string(c1Funds)), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.90f, 0.03f), 0.06f);
 				renderText(std::string("Castle 2 Funds " + std::to_string(c2Funds)), textShader, glm::vec3(1.0), glm::vec3(0.40f, 0.90f, 0.03f), 0.06f);
 				shader.enable();
+
+				if (castles.at(1)->getPowerup()) {
+					glBindTexture(GL_TEXTURE_2D, tex[16]);
+					shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-0.7, 1.85, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.12, 0.17, 1)));
+					glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+				}
 
 				glBindTexture(GL_TEXTURE_2D, tex[2]);
 				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.80, 1.6, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
@@ -371,6 +380,7 @@ int main(void){
 				particleSystem.setAttributes();
 				particleSystem.setUniformMat4("viewMatrix", camera->getViewMatrix());
 
+				//checks for defeated castle and changes state
 				for (int i = 0; i < board->getCastles().size(); i++)
 				{
 					if (board->getCastles().at(0)->getHealth() <= 0)
@@ -386,13 +396,13 @@ int main(void){
 				}
 				break;
 			}
-			case 2:
+			case 2: //defeat screen
 				camera->update(0);
 				renderText(std::string("Kingdom Seige"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
 				renderText(std::string("DEFEAT"), textShader, glm::vec3(1.0), glm::vec3(-0.22f, 0.45f, 0.1f), 0.12f);
 				shader.enable();
 				break;
-			case 3:
+			case 3: //victory screen
 				camera->update(0);
 				renderText(std::string("Kingdom Seige"), textShader, glm::vec3(1.0), glm::vec3(-0.60f, 0.65f, 0.1f), 0.12f);
 				renderText(std::string("VICTORY"), textShader, glm::vec3(1.0), glm::vec3(-0.3f, 0.45f, 0.1f), 0.12f);

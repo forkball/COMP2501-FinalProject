@@ -3,7 +3,6 @@
 #include "Unit.h"
 #include "Tower.h"
 #include "Graph.h"
-#include "Powerup.h"
 
 class Castle :
 	public GameObject
@@ -18,7 +17,6 @@ public:
 		   std::vector<GLuint> unitTextures,
 		   std::vector<GLuint> towerTextures);
 	~Castle();
-	Powerup* P;
 	//render entities
 	void render(Shader &shader, ParticleSystem &ps);
 	//updates entities
@@ -42,6 +40,7 @@ public:
 	inline GLint getNumElem() { return numElem; }
 	inline double getHealth() { return health; }
 	inline double getFunds() { return funds; }
+	inline bool getPowerup() { return powerup; }
 	//add to vectors
 	inline void addUnit(Unit* u) { units.push_back(u); }
 	inline void addTower(Tower* t) { towers.push_back(t); }

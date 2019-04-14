@@ -160,7 +160,6 @@
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
-    <ClCompile Include="Powerup.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Tower.cpp" />
@@ -176,7 +175,6 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="ParticleSystem.h" />
-    <ClInclude Include="Powerup.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Tower.h" />

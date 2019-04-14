@@ -26,12 +26,13 @@ public:
 	inline void freeze() { freezeSlow = true; }
 	inline int getType() { return type; }
 	inline double getDamage() { return damage; }
+	inline void powerUp() { powerup = true; }
 private:
 	GLuint freezeTexture;
 	GLuint size;
 	int type = 0;
-	bool playerControlled, freezeSlow, enemyNear;
-	double damage, orgSpeed, movementSpeed, enemyDist, attackDelay, attackTimer = 0, freezeTimer = 0, freezeDelay = 3;
+	bool playerControlled, freezeSlow, enemyNear, powerup = false;
+	double orgDamage, damage, orgSpeed, movementSpeed, enemyDist, attackDelay, powerupTimer, powerupDuration = 5, attackTimer = 0, freezeTimer = 0, freezeDelay = 3;
 	GameObject* parent;
 	GameObject* enemy = NULL;
 	Graph* graph;
