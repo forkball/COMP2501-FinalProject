@@ -20,7 +20,7 @@ public:
 	~Castle();
 	Powerup* P;
 	//render entities
-	void render(Shader &shader);
+	void render(Shader &shader, ParticleSystem &ps);
 	//updates entities
 	void update(double deltaTime,glm::vec2 mousePosition, Castle* otherCastles);
 	//spend funds, return if funds were spent or not
@@ -60,6 +60,8 @@ private:
 	//holds textures of projectiles
 	std::vector<GLuint> projectileTextures;
 	bool playerControlled;
+	bool powerup = false;
+	bool heal;
 	double health,
 		funds = 100,
 		t1Cost = 150,

@@ -113,7 +113,7 @@ void Board::render(Shader &shader, ParticleSystem &ps)
 {
 	for (int i = 0; i < castles.size(); i++)
 	{
-		castles.at(i)->render(shader);
+		castles.at(i)->render(shader, ps);
 		//renders towers
 		for (int j = 0; j < castles.at(i)->getTowers().size(); j++)
 		{

@@ -41,6 +41,9 @@ Powerup P =  Powerup((int)rand() % 1, glm::vec3(1, 1, 1), glm::vec3((int)rand() 
 static auto t1 = Clock::now();
 static auto t2 = Clock::now();
 static auto t3 = Clock::now();
+static auto t4 = Clock::now();
+static auto t5 = Clock::now();
+
 
 //update function
 void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCastles)
@@ -54,9 +57,12 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 		static int ktwo = 3;
 		static int k;
 		static int lastchanged;
+		static bool heal = false;
 		//current time
 		t2 = Clock::now();
 		
+		static int oldButtonState = GLFW_RELEASE;
+		int newButtonState = glfwGetKey(Window::getWindow(), GLFW_KEY_W);
 		static int oldMouseState = GLFW_RELEASE;
 		int newMouseState = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_RIGHT);
 		static int oldMouseStateleft = GLFW_RELEASE;
@@ -159,34 +165,52 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 		oldMouseState = newMouseState;
 		oldMouseStateleft = newMouseStateleft;
 		#pragma endregion
+
+
+		if ((t2 - t3).count() > 10000000000) {
+
+			t3 = Clock::now();
+			powerup = true;
+
+		}
+
+
+		if (newButtonState != oldButtonState) {
+
+			if (powerup) {
+			
+				heal = true;
+				powerup = false;
+				t4 = Clock::now();
+				t5 = Clock::now();
+			}
+		
+		}
+
+		if (heal) {
+			
+			if ((t2 - t4).count() < 5000000000) {
+		
+
+				if ((t2 - t5).count() > 1000000000) {
+						this->takeDamage(-5);
+						t5 = Clock::now();
+				}
+			}
+			else {
+				heal = false;
+			}
+
+			oldButtonState = newButtonState;
+
 	}
 
 
-	if ((t2-t3).count() > 10000000000) {
 	
-		t3 = Clock::now();
 	
-			P = new Powerup((int)rand() % 1, glm::vec3(1,1,1), glm::vec3((int)rand() % 1, (int)rand() % 1, (int)rand() % 1), tex[(int)rand() % 1 + 28], 0);
-
-
-
-
-
-
+	
+	
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	//update towers
@@ -222,8 +246,19 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 }
 
 //renders entitys of castle
-void Castle::render(Shader& shader)
+void Castle::render(Shader& shader, ParticleSystem &ps)
 {
+
+	if (heal) {
+		ps.enable();
+		ps.setAttributes();
+		ps.drawParticles(position, 1.0f, 0, tex[28], 5.0f);
+	}
+
+	shader.enable();
+	shader.setAttributes();
+
+
 	GameObject::render(shader);
 	//P->render(shader);
 }
