@@ -310,6 +310,18 @@ int main(void){
 				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.80, 1.0, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
 				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
 
+				glBindTexture(GL_TEXTURE_2D, tex[14]);
+				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.90, -1.8, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
+				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+
+				glBindTexture(GL_TEXTURE_2D, tex[10]);
+				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.90, -1.6, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
+				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+
+				glBindTexture(GL_TEXTURE_2D, tex[12]);
+				shader.setUniformMat4("transformationMatrix", glm::translate(glm::mat4(1.0f), -camera->getPosition()) * glm::translate(glm::mat4(1.0f), glm::vec3(-1.90, -1.4, 0.0)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.15, 1)));
+				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+
 				renderText(std::string("1"), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.80f, 0.03f), 0.06f);
 				renderText(std::string("2"), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.70f, 0.03f), 0.06f);
 				renderText(std::string("3"), textShader, glm::vec3(1.0), glm::vec3(-0.95f, 0.60f, 0.03f), 0.06f);
@@ -319,6 +331,10 @@ int main(void){
 				renderText(std::string("10"), textShader, glm::vec3(1.0), glm::vec3(-0.85f, 0.70f, 0.03f), 0.06f);
 				renderText(std::string("100"), textShader, glm::vec3(1.0), glm::vec3(-0.85f, 0.60f, 0.03f), 0.06f);
 				renderText(std::string("50"), textShader, glm::vec3(1.0), glm::vec3(-0.85f, 0.50f, 0.03f), 0.06f);
+
+				renderText(std::string("150"), textShader, glm::vec3(1.0), glm::vec3(-0.9f, -0.90f, 0.03f), 0.06f);
+				renderText(std::string("200"), textShader, glm::vec3(1.0), glm::vec3(-0.9f, -0.80f, 0.03f), 0.06f);
+				renderText(std::string("250"), textShader, glm::vec3(1.0), glm::vec3(-0.9f, -0.70f, 0.03f), 0.06f);
 				shader.enable();
 				#pragma endregion
 
