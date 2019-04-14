@@ -62,8 +62,8 @@ private:
 	bool playerControlled;
 	double health,
 		funds = 100,
-		t1Cost = 200,
-		t2Cost = 250,
-		t3Cost = 150;
+		t1Cost = 150,
+		t2Cost = 200,
+		t3Cost = 250;
 };
 
