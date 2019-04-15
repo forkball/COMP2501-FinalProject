@@ -191,20 +191,21 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 
 		// check if button pressed
 		if (newButtonState != oldButtonState) {
+			if (units.size() > 0) {
+				// check if powerup is off cooldown
+				if (powerup) {
+					powerup = false;
 
-			// check if powerup is off cooldown
-			if (powerup) {
-				powerup = false;
+					// increase unit damages
+					for (int i = 0; i < units.size(); i++)
+					{
+						units.at(i)->powerUp();
+					}
 
-				// increase unit damages
-				for (int i = 0; i < units.size(); i++)
-				{
-					units.at(i)->powerUp();
+					// reset clocks
+					t4 = Clock::now();
+					t5 = Clock::now();
 				}
-
-				// reset clocks
-				t4 = Clock::now();
-				t5 = Clock::now();
 			}
 		}
 	}
