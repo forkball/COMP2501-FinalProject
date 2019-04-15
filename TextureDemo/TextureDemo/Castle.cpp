@@ -37,6 +37,8 @@ Castle::~Castle()
 }
 
 extern GLuint tex[];
+
+// set clocks to use
 static auto t1 = Clock::now();
 static auto t2 = Clock::now();
 static auto t3 = Clock::now();
@@ -59,6 +61,7 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 		//current time
 		t2 = Clock::now();
 		
+		// set variables to keep track of inputs
 		static int oldButtonState = GLFW_RELEASE;
 		int newButtonState = glfwGetKey(Window::getWindow(), GLFW_KEY_W);
 		static int oldMouseState = GLFW_RELEASE;
@@ -68,16 +71,20 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 		#pragma region Castle Placement
 		int newMouseStateleft = glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT);
 			for (int i = 0; i < towers.size(); i++) {
+				// check mouse position and tower position
 				if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && 
 					(towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
-					//time of click
+					//time of right click
 					t1 = Clock::now();
 					if (newMouseState == GLFW_RELEASE && oldMouseState == GLFW_PRESS) {
+
+						// use correct selector for tower
 						if (towers[i]->getPosition().x == -4.0) {
 						k = kone;
 					}
 					else if (towers[i]->getPosition().x == -2.5)  { k = ktwo; }
 
+						// rotate through towers
 					if (towers[i]->getType() == 3) {
 						lastchanged = i;
 						switch (k) {
@@ -104,6 +111,8 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 							break;
 						}
 					}
+
+					// update correct selector
 					if (towers[i]->getPosition().x == -4.0) {
 						kone = k;
 					}
@@ -111,11 +120,15 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 				}
 			}
 		}
-
+			// check if mouse moves away from tower
 		if (((towers[lastchanged]->getPosition().x - mousePosition.x) < 0.2 && (towers[lastchanged]->getPosition().x - mousePosition.x) > -0.2 && 
 			(towers[lastchanged]->getPosition().y + mousePosition.y) < 0.4 && 
 			(towers[lastchanged]->getPosition().y + mousePosition.y) > -0.4) == false) {
+
+			// check if tower is unplaced
 			if (towers[lastchanged]->getType() == 3) {
+
+				// if 1 second has passed, reset rotation
 				if ((t2 - t1).count() > 1000000000) {
 					kone = 3;
 					ktwo = 3;
@@ -123,15 +136,23 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 				}
 			}
 		}
+
+
 		for (int i = 0; i < towers.size(); i++) {
+			// check mouse and tower positions
 			if ((towers[i]->getPosition().x - mousePosition.x) < 0.2 && (towers[i]->getPosition().x - mousePosition.x) > -0.2 && 
 				(towers[i]->getPosition().y + mousePosition.y) < 0.4 && (towers[i]->getPosition().y + mousePosition.y) > -0.4) {
+
+				// use correct selector
 				if (towers[i]->getPosition().x == -4.0) {
 					k = kone;
 				}
 				else if (towers[i]->getPosition().x == -2.5) { k = ktwo; }
 
+				// get left click
 				if (newMouseStateleft == GLFW_RELEASE && oldMouseStateleft == GLFW_PRESS) {
+
+					// place tower
 					if (towers[i]->getType() == 3) {
 						switch (k) {
 						case 0:
@@ -150,29 +171,38 @@ void Castle::update(double deltaTime, glm::vec2 mousePosition, Castle* otherCast
 					}
 				}
 
+				// update selector
 				if (towers[i]->getPosition().x == -4.0) {
 					kone = k;
 				}
 				else if(towers[i]->getPosition().x == -2.5) { ktwo = k; }
 		}
 	}
-
+		// update mouse states
 		oldMouseState = newMouseState;
 		oldMouseStateleft = newMouseStateleft;
 		#pragma endregion=
 
+		// count 10 seconds to make powerup available
 		if ((t2 - t3).count() > 10000000000) {
 			t3 = Clock::now();
 			powerup = true;
 		}
 
+		// check if button pressed
 		if (newButtonState != oldButtonState) {
+
+			// check if powerup is off cooldown
 			if (powerup) {
 				powerup = false;
+
+				// increase unit damages
 				for (int i = 0; i < units.size(); i++)
 				{
 					units.at(i)->powerUp();
 				}
+
+				// reset clocks
 				t4 = Clock::now();
 				t5 = Clock::now();
 			}

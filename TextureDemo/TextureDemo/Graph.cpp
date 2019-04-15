@@ -209,7 +209,7 @@ std::vector<glm::vec2> Graph::pathfind(glm::vec2 start, glm::vec2 end) {
 			//cost = the cost to get the corrent node + cost to traverse the edge
 
 			Node *n = &getNode(lowest.node->getOtherNode(neighbours.at(i)).getId());
-			//Node *n = &(lowest.node->getOtherNode(neighbours.at(i)));
+
 			n->setVisited(true);
 			int nodeCost = lowest.cost + neighbours.at(i).cost;
 

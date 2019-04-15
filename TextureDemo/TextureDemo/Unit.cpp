@@ -60,8 +60,8 @@ extern GLuint tex[];
 
 void Unit::update(double deltaTime, GameObject* enemyCastle)
 {
+		// buffs minions
 	if (powerup) {
-		std::cout << "ping";
 		damage = orgDamage * 1.5;
 		if ((glfwGetTime() - powerupTimer) > powerupDuration)
 			powerup = false;
